@@ -1,0 +1,8 @@
+h1 {
+    font-size: 2em;
+    cursor: pointer;
+
+    &:hover {
+        color: red;
+    }
+}
