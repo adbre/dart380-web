@@ -3,7 +3,7 @@ module.exports = function (grunt) {
     // Watch task config
     watch: {
       sass: {
-        files: "app/scss/*.scss",
+        files: "app/**/*.scss",
         tasks: ['sass']
       }
     },
@@ -11,8 +11,8 @@ module.exports = function (grunt) {
     sass: {
         dev: {
             files: {
-                // destination         // source file
-                "dist/css/styles.css" : "app/scss/styles.scss"
+                // destination  // source file
+                "dist/app.css": "app/app.scss"
             }
         }
     },
@@ -20,8 +20,9 @@ module.exports = function (grunt) {
         default_options: {
             bsFiles: {
                 src: [
-                    "dist/css/*.css",
-                    "*.html"
+                    "dist/app.css",
+                    "dist/app.js",
+                    "index.html"
                 ]
             },
             options: {
@@ -31,11 +32,51 @@ module.exports = function (grunt) {
                 }
             }
         }
+    },
+    browserify: {
+        options: {
+            browserifyOptions: {
+                debug: true,
+                // strip unnecessary built-ins
+                builtins: [ 'events' ],
+                // make sure we do not include Node stubs unnecessarily
+                insertGlobalVars: {
+                    process: function () {
+                        return 'undefined';
+                    },
+                    Buffer: function () {
+                        return 'undefined';
+                    }
+                }
+            }
+        },
+        watch: {
+            options: {
+                watch: true
+            },
+            files: {
+                'dist/app.js': [ 'app/app.js' ]
+            }
+        },
+        app: {
+            files: {
+                'dist/app.js': [ 'app/app.js' ]
+            }
+        }
     }
   });
 
+  grunt.loadNpmTasks('grunt-browserify');
   grunt.loadNpmTasks('grunt-contrib-sass');
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-browser-sync');
-  grunt.registerTask('default', ['browserSync', 'watch']);
+  grunt.loadNpmTasks('grunt-browserify');
+
+  grunt.registerTask('build', ['sass','browserify:app']);
+
+  grunt.registerTask('test', []);
+
+  grunt.registerTask('auto-build', ['browserSync', 'browserify:watch', 'watch']);
+
+  grunt.registerTask('default', ['test', 'build']);
 };
