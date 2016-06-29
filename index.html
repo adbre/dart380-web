@@ -1,13 +1,301 @@
+<!DOCTYPE html5>
 <html>
     <head>
         <title>Dart380</title>
-        <link rel="stylesheet" href="dist/app.css">
+
+        <link rel="stylesheet" href="dist/app.css" />
     </head>
     <body>
-        <h1 id="title">Hello</h1>
+        <div class="dart380 panel">
+          <div class="top-row">
+            <div class="panel item-identification">
+              <p class="device-name">DART 380</p>
 
-        The quick brown fox jumps the lazy dog.
+              <p class="ericsson">ERICSSON</p>
+              <div class="ericsson-logo-1st-bar"></div>
+              <div class="ericsson-logo-2nd-bar"></div>
+              <div class="ericsson-logo-3rd-bar"></div>
 
-        <script src="dist/app.js"></script>
+              <p class="skeranpassad">SKERANPASSAD</p>
+            </div>
+
+            <div class="panel display-container">
+              <div class="display display-large">
+                <p class="text" data-bind="text: textLargeDisplay"></p>
+                <p class="name">DATAMEDDELANDE</p>
+              </div>
+
+              <div class="display display-small">
+                <p class="text" data-bind="text: textSmallDisplay"></p>
+                <p class="name">RADIO/OPM</p>
+              </div>
+            </div>
+          </div>
+          <div class="keyboard panel">
+            <div class="top-section">
+              <div class="function-keys">
+                <div class="write-plane panel"></div>
+                <ul class="keys">
+                  <li><button>F1</button></li>
+                  <li><button>F2</button></li>
+                  <li><button>F3</button></li>
+                  <li><button>F4</button></li>
+                  <li><button>FMT</button></li>
+                </ul>
+                <ul class="keys">
+                  <li><button>REP</button></li>
+                  <li><button>RAD</button></li>
+                  <li><button>KVI</button></li>
+                  <li><button>SKR</button></li>
+                  <li><button>DDA</button></li>
+                </ul>
+                <ul class="keys">
+                  <li><button>SND</button></li>
+                  <li>
+                  <div class="show-message">
+                    <ul class="keys">
+                      <li><button>EKV</button></li>
+                      <li><button>MOT</button></li>
+                      <li><button>AVS</button></li>
+                      <li><button>ISK</button></li>
+                    </ul>
+                    <p>VISA MEDDELANDE</p>
+                    </div>
+                  </li>
+              </div>
+              <div class="radio-keys">
+                <div class="operation-keys">
+                  <div class="write-plane panel"></div>
+                  <ul class="keys">
+                    <li><button>OPM</button></li>
+                    <li><button>EFF</button></li>
+                    <li><button>ÄND</button></li>
+                  </ul>
+                  <ul class="keys">
+                    <li><button><span class="dart380-btn-sun">&nbsp;</span></button></li>
+                    <li><button>SLT</button></li>
+                    <li><button>&#x23ce;</button></li>
+                  </ul>
+                </div>
+                <div class="numeric-keys">
+                  <ul class="keys">
+                    <li>
+                      <button>
+                        <div class="dart380-shift-value">TID</div>
+                        <div class="">1</div>
+                      </button>
+                    </li>
+                    <li>
+                      <button>
+                        <div class="dart380-shift-value">RDA</div>
+                        <div class="">2</div>
+                      </button>
+                    </li>
+                    <li>
+                      <button>
+                        <div class="">3</div>
+                      </button>
+                    </li>
+                  </ul>
+                  <ul class="keys">
+                    <li>
+                      <button>
+                        <div class="dart380-shift-value">KDA</div>
+                        <div class="">4</div>
+                      </button>
+                    </li>
+                    <li>
+                      <button>
+                        <div class="">5</div>
+                      </button>
+                    </li>
+                    <li>
+                      <button>
+                        <div class="dart380-shift-value">RAP</div>
+                        <div class="">6</div>
+                      </button>
+                    </li>
+                  </ul>
+                  <ul class="keys">
+                    <li>
+                      <button>
+                        <div class="dart380-shift-value">NYK</div>
+                        <div class="">7</div>
+                      </button>
+                    </li>
+                    <li>
+                      <button>
+                        <div class="">8</div>
+                      </button>
+                    </li>
+                    <li>
+                      <button>
+                        <div class="dart380-shift-value">TJK</div>
+                        <div class="">9</div>
+                      </button>
+                    </li>
+                  </ul>
+                  <ul class="keys">
+                    <li><button><span class="dart380-btn-star">&nbsp;</span></button></li>
+                    <li><button>0</button></li>
+                    <li><button>#</button></li>
+                  </ul>
+                  <a class="reset">NOLLST</a>
+                </div>
+              </div>
+            </div>
+            <div class="qwerty">
+              <ul class="keys">
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">!</div>
+                    <div class="">Q</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">"</div>
+                    <div class="">W</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">#</div>
+                    <div class="">E</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">@</div>
+                    <div class="">R</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">%</div>
+                    <div class="">T</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">&amp;</div>
+                    <div class="">Y</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">/</div>
+                    <div class="">U</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">(</div>
+                    <div class="">I</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">)</div>
+                    <div class="">O</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">=</div>
+                    <div class="">P</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">+</div>
+                    <div class="">Å</div>
+                  </button>
+                </li>
+                <li><button>DEL</button></li>
+              </ul>
+              <ul class="keys indent-half-key">
+                <li><button>A</button></li>
+                <li><button>S</button></li>
+                <li><button>D</button></li>
+                <li><button>F</button></li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">´</div>
+                    <div class="">G</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">^</div>
+                    <div class="">H</div>
+                  </button>
+                </li>
+                <li>
+                  <button>
+                    <div class="dart380-shift-value">$</div>
+                    <div class="">J</div>
+                  </button>
+                </li>
+                  <button>
+                    <div class="dart380-shift-value">&lt;</div>
+                    <div class="">K</div>
+                  </button>
+                </li>
+                  <button>
+                    <div class="dart380-shift-value">&gt;</div>
+                    <div class="">L</div>
+                  </button>
+                </li>
+                  <button>
+                    <div class="dart380-shift-value">*</div>
+                    <div class="">Ö</div>
+                  </button>
+                </li>
+                  <button>
+                    <div class="dart380-shift-value">?</div>
+                    <div class="">Ä</div>
+                  </button>
+                </li>
+              </ul>
+              <ul class="keys">
+                <li><button class="shift-key">&#x21ea;</button></li>
+                <li><button>Z</button></li>
+                <li><button>X</button></li>
+                <li><button>C</button></li>
+                <li><button>V</button></li>
+                <li><button>B</button></li>
+                <li><button>N</button></li>
+                <li><button>M</button></li>
+                  <button>
+                    <div class="dart380-shift-value">;</div>
+                    <div class="">,</div>
+                  </button>
+                </li>
+                  <button>
+                    <div class="dart380-shift-value">:</div>
+                    <div class="">.</div>
+                  </button>
+                </li>
+                  <button>
+                    <div class="dart380-shift-value">_</div>
+                    <div class="">-</div>
+                  </button>
+                </li>
+                <li><button>&#x23ce;</button></li>
+              </ul>
+              <ul class="keys indent-one-key">
+                <li><button>&larr;</button></li>
+                <li><button>&rarr;</button></li>
+                <li><button>&uarr;</button></li>
+                <li><button>&darr;</button></li>
+                <li><button class="btn-4">&nbsp;</button></li>
+                <li><button>&#x25b3;</button></li>
+                <li><button>&#x25bd;</button></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      <script src="dist/app.js"></script>
     </body>
 </html>
