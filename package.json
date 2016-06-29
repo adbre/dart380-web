@@ -14,5 +14,10 @@
     "grunt-browserify": "^5.0.0",
     "grunt-contrib-sass": "^1.0.0",
     "grunt-contrib-watch": "^1.0.0"
+  },
+  "dependencies": {
+    "jquery": "^3.0.0",
+    "knockout": "^3.4.0",
+    "lodash": "^4.13.1"
   }
 }
