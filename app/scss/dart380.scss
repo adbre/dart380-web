@@ -25,7 +25,11 @@ $borderWidth: 0.15em;
     font-family: Arial;
     color: $white;
 
-    width: 59em;
+    border-radius: 0.5em;
+
+    display: flex;
+
+    max-width: 70em;
 
     .dart380-connections {
        background-color: $black;
@@ -37,8 +41,129 @@ $borderWidth: 0.15em;
         padding: 0.5em;
     }
 
-    &.panel {
-        padding: 1em;
+    .mid {
+        padding: 0.5em;
+        margin: 0.5em;
+        width: 59em;
+    }
+
+    .right {
+        background-color: darken($oliveGreen, 5%);
+        border: 0.2em solid $metallicBlack;
+        border-right: none;
+        border-top-left-radius: 0.5em;
+        border-bottom-left-radius: 0.5em;
+        margin-left: 0.5em;
+        margin-top: 1em;
+        margin-bottom: 1em;
+        margin-right: 0;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+
+        .knobs {
+            margin-top: auto;
+            background-color: darken($metallicBlack, 1%);
+            border-radius: 0.5em;
+            padding: 0.5em;
+            height: 37em;
+
+            .knob {
+                position: relative;
+                height: 10em;
+
+                p {
+                    text-align: center;
+                }
+
+                &:before {
+                    position: absolute;
+                    height: 6em;
+                    width: 6em;
+                    border: 1px dotted white;
+                    border-radius: 50%;
+                    top: 2em;
+                    left: 1.2em;
+                }
+
+                label {
+                    font-size: 0.6em;
+                    position: absolute;
+                    cursor: pointer;
+
+                    &:hover {
+                        color: yellow;
+                        text-decoration: underline;
+                    }
+
+                    input[type=radio] {
+                        display: block;
+                        opacity: 0;
+                    }
+                }
+
+                svg {
+                    position: relative;
+                    left: 1.2em;
+                    cursor: pointer;
+                    .base { fill: darken($oliveGreen, 10%); }
+                    .handle { fill: $oliveGreen; }
+                    .screw { fill: darken($metallicBlack, 10%); }
+                    .marker { fill: darken($white, 10%); }
+
+                    &:hover {
+                        .base { fill: lighten($oliveGreen, 10%); }
+                    }
+
+                    &.value-1 { transform: rotate(-125deg); }
+                    &.value-2 { transform: rotate(-90deg); }
+                    &.value-3 { transform: rotate(-55deg); }
+                    &.value-4 { transform: rotate(-20deg); }
+                    &.value-5 { transform: rotate(15deg); }
+                    &.value-6 { transform: rotate(55deg); }
+                    &.value-7 { transform: rotate(90deg); }
+                    &.value-8 { transform: rotate(125deg); }
+                }
+
+                label:nth-child(1) { top: 10em; left: 2em; }
+                label:nth-child(2) { top: 6em; left: 1em; }
+                label:nth-child(3) { top: 3em; left: 2em; }
+                label:nth-child(4) { top: 0.8em; left: 5em; }
+                label:nth-child(5) { top: 0.8em; left: 8.5em; }
+                label:nth-child(6) { top: 3em; left: 11.5em; }
+                label:nth-child(7) { top: 6em; left: 12.5em; }
+                label:nth-child(8) { top: 10em; left: 11.5em; }
+
+                &:nth-child(2) { // MOD
+                    label:nth-child(1) { left: 1.5em; } // FR
+                    label:nth-child(2) { left: 0.4em; } // TE
+                    label:nth-child(3) { top: 2.5em; left: 0; } // KLAR
+                    label:nth-child(4) { top: 0.5em; left: 2.5em; } // SKYDD
+                    label:nth-child(5) { top: 0.5em; left: 7.5em; } // D RELÄ
+
+                    label:nth-child(3), // KLAR
+                    label:nth-child(4), // SKYDD
+                    label:nth-child(5) { // D RELÄ
+                        span {
+                            position: relative;
+                            &:after {
+                                position: absolute;
+                                content: '*';
+                                top: 1em;
+                                right: 0.5em;
+                                color: $white;
+                            }
+                        }
+                    }
+
+                    label:nth-child(5) {
+                        span:after {
+                            right: 2.5em;
+                         }
+                    }
+                }
+            }
+        }
     }
 
     .top-row {
@@ -152,10 +277,11 @@ $borderWidth: 0.15em;
             margin: 0.3em;
             z-index: 1000;
             cursor: pointer;
+            outline: none;
 
             &:hover, &.active {
-                color: $metallicBlack;
-                background-color: $white;
+                color: darken($white, 10%);
+                background-color: darken($metallicBlack, 10%);
             }
 
             .dart380-btn-sun, .dart380-btn-star {
