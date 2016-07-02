@@ -1,11 +1,17 @@
 module.exports = function (grunt) {
-  grunt.initConfig({
+    require('load-grunt-tasks')(grunt);
+
+    // configures browsers to run test against
+    // any of [ 'PhantomJS', 'Chrome', 'Firefox', 'IE']
+    var TEST_BROWSERS = ((process.env.TEST_BROWSERS || '').replace(/^\s+|\s+$/, '') || 'PhantomJS').split(/\s*,\s*/g);
+
+    grunt.initConfig({
     // Watch task config
     watch: {
-      sass: {
+        sass: {
         files: "app/**/*.scss",
         tasks: ['sass']
-      }
+        }
     },
     // SASS task config
     sass: {
@@ -63,20 +69,24 @@ module.exports = function (grunt) {
                 'dist/app.js': [ 'app/app.js' ]
             }
         }
+    },
+    karma: {
+        options: {
+            configFile: 'test/config/karma.unit.js'
+        },
+        single: {
+            singleRun: true,
+            autoWatch: false,
+            browsers: TEST_BROWSERS
+        },
+        unit: {
+            browsers: TEST_BROWSERS
+        }
     }
-  });
+    });
 
-  grunt.loadNpmTasks('grunt-browserify');
-  grunt.loadNpmTasks('grunt-contrib-sass');
-  grunt.loadNpmTasks('grunt-contrib-watch');
-  grunt.loadNpmTasks('grunt-browser-sync');
-  grunt.loadNpmTasks('grunt-browserify');
-
-  grunt.registerTask('build', ['sass','browserify:app']);
-
-  grunt.registerTask('test', []);
-
-  grunt.registerTask('auto-build', ['browserSync', 'browserify:watch', 'watch']);
-
-  grunt.registerTask('default', ['test', 'build']);
+    grunt.registerTask('build', ['sass','browserify:app']);
+    grunt.registerTask('test', []);
+    grunt.registerTask('auto-build', ['browserSync', 'browserify:watch', 'watch']);
+    grunt.registerTask('default', ['test', 'build']);
 };
