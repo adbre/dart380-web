@@ -1,12 +1,18 @@
 {
   "name": "dart380",
-  "version": "0.0.0",
-  "description": "",
+  "version": "0.1.0",
+  "description": "A ",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "all": "grunt",
+    "dev": "grunt auto-test",
+    "distro": "grunt auto-build",
+    "test": "grunt test"
   },
-  "author": "",
+  "author": {
+    "name": "Adam Brengesjö",
+    "url": "https://github.com/adbre"
+  },
   "license": "MIT",
   "devDependencies": {
     "browserify": "^13.0.1",
