@@ -36,6 +36,8 @@
     "watchify": "^3.7.0"
   },
   "dependencies": {
+    "didi": "^0.1.1",
+    "inherits": "^2.0.1",
     "jquery": "^3.0.0",
     "knockout": "^3.4.0",
     "lodash": "^4.13.1"

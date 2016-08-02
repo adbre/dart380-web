@@ -3,11 +3,13 @@
 var _ = require('lodash'),
     ko = require('knockout');
 
-function Knob(value) {
-    this.value = ko.observable(value || 1);
+function SwitchViewModel(switchModel, eventBus) {
+    var self = this;
+    self._switch = switchModel;
+    self.value = ko.observable(this._switch.getValue());
 
-    this.css = ko.pureComputed(_.bind(function () {
-        var value = this.value();
+    self.css = ko.pureComputed(function () {
+        var value = self.value();
         return {
             'value-1': value === 1,
             'value-2': value === 2,
@@ -18,15 +20,19 @@ function Knob(value) {
             'value-7': value === 7,
             'value-8': value === 8,
         };
-    }, this));
+    });
+
+    eventBus.on(switchModel.name + '.changed', function (e) {
+       self.value(e.value);
+    });
 }
 
-module.exports = Knob;
+module.exports = SwitchViewModel;
 
-Knob.prototype.onClick = function () {
+SwitchViewModel.prototype.onClick = function () {
     var value = this.value() + 1;
     if (value > 8) {
         value = 1;
     }
-    this.value(value);
+    this._switch.setValue(value);
 };

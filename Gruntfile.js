@@ -86,7 +86,8 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('build', ['sass','browserify:app']);
-    grunt.registerTask('test', []);
+    grunt.registerTask('test', ['karma:single']);
+    grunt.registerTask('auto-test', ['karma:unit']);
     grunt.registerTask('auto-build', ['browserSync', 'browserify:watch', 'watch']);
     grunt.registerTask('default', ['test', 'build']);
 };

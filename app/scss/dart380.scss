@@ -61,14 +61,14 @@ $borderWidth: 0.15em;
         display: flex;
         flex-direction: column;
 
-        .knobs {
+        .switches {
             margin-top: auto;
             background-color: darken($metallicBlack, 1%);
             border-radius: 0.5em;
             padding: 0.5em;
             height: 37em;
 
-            .knob {
+            .switch {
                 position: relative;
                 height: 10em;
 

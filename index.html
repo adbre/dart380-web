@@ -298,8 +298,8 @@
             </div>
           </div>
           <div class="right">
-            <div class="knobs panel">
-              <div class="knob" data-bind="with: knobChannel">
+            <div class="switches panel">
+              <div class="switch" data-bind="with: switchChannel">
                   <p>KANAL</p>
                   <div>
                     <label><input type="radio" name="channel" value="1" /><span>1</span></label>
@@ -311,9 +311,9 @@
                     <label><input type="radio" name="channel" value="7" /><span>7</span></label>
                     <label><input type="radio" name="channel" value="8" /><span>8</span></label>
                   </div>
-                  <div data-bind="template: { name: 'template-knob-svg', data: $data }"></div>
+                  <div data-bind="template: { name: 'template-switch-svg', data: $data }"></div>
               </div>
-              <div class="knob" data-bind="with: knobMod">
+              <div class="switch" data-bind="with: switchMod">
                   <p>MOD</p>
                   <div>
                     <label><input type="radio" name="mod" value="1" /><span>FR</span></label>
@@ -325,9 +325,9 @@
                     <label><input type="radio" name="mod" value="7" /><span>NG</span></label>
                     <label><input type="radio" name="mod" value="8" /><span>FmP</span></label>
                   </div>
-                  <div data-bind="template: { name: 'template-knob-svg', data: $data }"></div>
+                  <div data-bind="template: { name: 'template-switch-svg', data: $data }"></div>
               </div>
-              <div class="knob" data-bind="with: knobVolume">
+              <div class="switch" data-bind="with: switchVolume">
                   <p>VOLYM</p>
                   <div>
                     <label><input type="radio" name="channel" value="1" /><span>1</span></label>
@@ -339,9 +339,9 @@
                     <label><input type="radio" name="channel" value="7" /><span>7</span></label>
                     <label><input type="radio" name="channel" value="8" /><span>8</span></label>
                   </div>
-                  <div data-bind="template: { name: 'template-knob-svg', data: $data }"></div>
+                  <div data-bind="template: { name: 'template-switch-svg', data: $data }"></div>
               </div>
-              <script type="text/html" id="template-knob-svg">
+              <script type="text/html" id="template-switch-svg">
                   <svg width="100" height="100" data-bind="click: onClick, css: css">
                     <g>
                       <circle class="base" cx="50" cy="50" r="40" stroke="black" stroke-width="1" fill="white" />
