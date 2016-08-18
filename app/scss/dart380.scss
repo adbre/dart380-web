@@ -285,17 +285,21 @@ $borderWidth: 0.15em;
             width: 100%;
             margin-left: 1em;
 
+            span.underline, .underline span { text-decoration: underline; }
+            span.hidden, .hidden span { opacity: 0; }
+
             > .display {
                 margin: 1em;
 
-                &.display-large { flex-grow: 2; }
-                &.display-small { flex-grow: 1; }
+                &.display-large { flex-grow: 2; min-width: 18em; }
+                &.display-small { flex-grow: 1; min-width: 9em; }
 
                 > .text {
                     color: $displayLedForeground;
                     font-size: 2em;
-                    font-family: "Light LED Board-7", monospace;
+                    font-family: "Lucida Console", Monaco, monospace;
                     margin: 0;
+                    padding-top: 0.3em;
                     text-align: center;
                     background-color: $displayLedBackground;
                     min-height: 1.5em;

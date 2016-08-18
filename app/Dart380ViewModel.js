@@ -6,6 +6,7 @@ var $ = require('jquery'),
 
 var Dart380 = require('../lib/Dart380');
 var SwitchViewModel = require('./SwitchViewModel');
+var DisplayViewModel = require('./DisplayViewModel');
 
 function Dart380ViewModel(dart380) {
     this._dart380 = dart380 = dart380 || new Dart380();
@@ -14,13 +15,8 @@ function Dart380ViewModel(dart380) {
     this._largeDisplay = dart380.get('largeDisplay');
     this._keyboard = dart380.get('keyboard');
 
-    this._eventBus.on(['smallDisplay.changed', 'largeDisplay.changed'], _.bind(this._onDisplayChanged, this));
-
-    var fire = this._eventBus.fire;
-    this._eventBus.fire = function (type, e) {
-        console.log('eventBus::fire', type, e);
-        fire.apply(this._eventBus, arguments);
-    }.bind(this);
+    this.largeDisplay = new DisplayViewModel(this._largeDisplay, this._eventBus);
+    this.smallDisplay = new DisplayViewModel(this._smallDisplay, this._eventBus);
 
     this.textLargeDisplay = ko.observable();
     this.textSmallDisplay = ko.observable();
@@ -28,8 +24,6 @@ function Dart380ViewModel(dart380) {
     this.switchChannel = new SwitchViewModel(dart380.get('switchChannel'), this._eventBus);
     this.switchMod = new SwitchViewModel(dart380.get('switchMod'), this._eventBus);
     this.switchVolume = new SwitchViewModel(dart380.get('switchVolume'), this._eventBus);
-
-    this._onDisplayChanged();
 }
 
 module.exports = Dart380ViewModel;
@@ -73,9 +67,4 @@ Dart380ViewModel.prototype.activate = function (view) {
     $(view).find("a.reset").click(function () {
         me.sendKey(Dart380.SPECIAL_KEYS.reset.text);
     });
-};
-
-Dart380ViewModel.prototype._onDisplayChanged = function (e) {
-    this.textSmallDisplay(this._smallDisplay.getText());
-    this.textLargeDisplay(this._largeDisplay.getText());
 };
