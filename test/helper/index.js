@@ -46,7 +46,7 @@ function bootstrapDart380(options, locals) {
 
     DART380_JS = new Dart380(_options);
 
-    jasmine.clock().install();
+    jasmine.clock().install().mockDate(new Date());
   };
 }
 
