@@ -29,7 +29,7 @@ function Dart380ViewModel(dart380) {
 module.exports = Dart380ViewModel;
 
 Dart380ViewModel.prototype.sendKey = function (key) {
-    this._dart380.sendKey(key);
+    this._keyboard.trigger(key);
 };
 
 Dart380ViewModel.prototype.activate = function (view) {
@@ -53,7 +53,7 @@ Dart380ViewModel.prototype.activate = function (view) {
             value = button.innerText;
         }
 
-        if (value === Dart380.SPECIAL_KEYS.shift.text) {
+        if (value === me._keyboard.keys.shift.text) {
             $shiftKey.toggleClass('active');
         }
         else if (shiftValue && $shiftKey.hasClass('active')) {
@@ -65,6 +65,6 @@ Dart380ViewModel.prototype.activate = function (view) {
     });
 
     $(view).find("a.reset").click(function () {
-        me.sendKey(Dart380.SPECIAL_KEYS.reset.text);
+        me.sendKey([me._keyboard.keys.asterix, me._keyboard.keys.hashtag]);
     });
 };

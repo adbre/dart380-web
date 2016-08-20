@@ -86,6 +86,73 @@ describe('Tid', function () {
             // then
             expect(smallDisplay.characters[1].blinking).toBe(true);
         }));
+
+        it('should reset blinking when closing T: menu', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.characters[1].blinking).toBe(false);
+        }));
+
+        describe('editing', function () {
+
+            beforeEach(inject(function(keyboard) {
+                keyboard.trigger('ÄND');
+            }));
+
+            it('should clear value', inject(function(smallDisplay) {
+                // then
+                expect(smallDisplay.get()).toBe('T:');
+            }));
+
+            it('should flash colon-character', inject(function(smallDisplay) {
+                // then
+                expect(smallDisplay.getBlinking()).toBe(1);
+            }));
+
+            it('should show cursor', inject(function(smallDisplay) {
+                // then
+                expect(smallDisplay.getCursor()).toBe(2);
+            }));
+
+            it('should write input', inject(function(smallDisplay, keyboard) {
+                // when
+                keyboard.trigger('2');
+
+                // then
+                expect(smallDisplay.get()).toBe('T:2');
+            }));
+
+            it('should move cursor with input', inject(function(smallDisplay, keyboard) {
+                // when
+                keyboard.trigger('2');
+
+                // then
+                expect(smallDisplay.getCursor()).toBe(3);
+            }));
+
+            it('should write input', inject(function(smallDisplay, keyboard) {
+                // when
+                keyboard.trigger('2');
+
+                // then
+                expect(smallDisplay.get()).toBe('T:2');
+            }));
+
+            it('should stop cursor at last character', inject(function(smallDisplay, keyboard) {
+                // when
+                keyboard.trigger('2');
+                keyboard.trigger('1');
+                keyboard.trigger('2');
+                keyboard.trigger('5');
+                keyboard.trigger('4');
+                keyboard.trigger('7');
+
+                // then
+                expect(smallDisplay.getCursor()).toBe(7);
+            }));
+        });
     });
 
     describe('DAT', function () {
@@ -119,7 +186,7 @@ describe('Tid', function () {
 
         it('should blink the colon to indicate it can be edited', inject(function(smallDisplay) {
             // then
-            expect(smallDisplay.characters[1].blinking).toBe(true);
+            expect(smallDisplay.characters[3].blinking).toBe(true);
         }));
 
     });
