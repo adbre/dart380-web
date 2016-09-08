@@ -152,6 +152,15 @@ describe('Tid', function () {
                 // then
                 expect(smallDisplay.getCursor()).toBe(7);
             }));
+
+            it('should cancel edit on SLT', inject(function(smallDisplay, keyboard) {
+                // when
+                keyboard.triggerMany('235959');
+                keyboard.trigger('SLT');
+
+                // then
+                expect(smallDisplay.get()).toBe('T:000000');
+            }));
         });
     });
 
@@ -166,28 +175,243 @@ describe('Tid', function () {
             expect(smallDisplay.get()).toBe('DAT:0101');
         }));
 
-        // Slow test
-        xit('should elapse day', inject(function(smallDisplay) {
-            // when
-            jasmine.clock().tick(24 * 60 * 60 * 1000);
-
-            // then
-            expect(smallDisplay.get()).toBe('DAT:0102');
-        }));
-
-        // Slow test
-        xit('should elapse month', inject(function(smallDisplay) {
-            // when
-            jasmine.clock().tick(31 * 24 * 60 * 60 * 1000);
-
-            // then
-            expect(smallDisplay.get()).toBe('DAT:0201');
-        }));
-
         it('should blink the colon to indicate it can be edited', inject(function(smallDisplay) {
             // then
             expect(smallDisplay.characters[3].blinking).toBe(true);
         }));
+    });
 
+    describe('time and date boundaries', function () {
+
+        it('should be 1000 milliseconds per second', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            jasmine.clock().tick(999);
+            expect(smallDisplay.get()).toBe('T:000000');
+            jasmine.clock().tick(1);
+            expect(smallDisplay.get()).toBe('T:000001');
+        }));
+
+        it('should be 59 seconds per minute', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('000059');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('T:000100');
+        }));
+
+        it('should be 59 minutes per hour', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('005959');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('T:010000');
+        }));
+
+        it('should have 24 hours per day', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:0102');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 31 days in January', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0131');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:0201');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 28 days in February', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0228');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:0301');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 31 days in March', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0331');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:0401');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 30 days in April', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0430');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:0501');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 31 days in May', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0531');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:0601');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 30 days in June', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0630');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:0701');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 31 days in July', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0731');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:0801');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 31 days in August', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0831');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:0901');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 30 days in September', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0930');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:1001');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 31 days in October', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('1031');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:1101');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 30 days in November', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('1130');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:1201');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
+
+        it('should have 31 days in December', inject(function(keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('235959');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('1231');
+            keyboard.trigger('⏎');
+            jasmine.clock().tick(1000);
+            expect(smallDisplay.get()).toBe('DAT:0101');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.get()).toBe('T:000000');
+        }));
     });
 });
