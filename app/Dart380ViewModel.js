@@ -24,6 +24,12 @@ function Dart380ViewModel(dart380) {
     this.channel = new SwitchViewModel(dart380.get('channel'), this._eventBus);
     this.mod = new SwitchViewModel(dart380.get('mod'), this._eventBus);
     this.volume = new SwitchViewModel(dart380.get('volume'), this._eventBus);
+
+    this._eventBus.on(['channel.changed', 'mod.changed', 'volume.changed'], function () {
+        this.channel.update();
+        this.mod.update();
+        this.volume.update();
+    }.bind(this));
 }
 
 module.exports = Dart380ViewModel;

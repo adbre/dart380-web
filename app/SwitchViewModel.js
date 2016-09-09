@@ -6,7 +6,7 @@ var _ = require('lodash'),
 function SwitchViewModel(switchModel, eventBus) {
     var self = this;
     self._switch = switchModel;
-    self.value = ko.observable(this._switch.getValue());
+    self.value = ko.observable(this._switch.get());
 
     self.css = ko.pureComputed(function () {
         var value = self.value();
@@ -21,10 +21,6 @@ function SwitchViewModel(switchModel, eventBus) {
             'value-8': value === 8,
         };
     });
-
-    eventBus.on(switchModel.name + '.changed', function (e) {
-       self.value(e.value);
-    });
 }
 
 module.exports = SwitchViewModel;
@@ -34,5 +30,9 @@ SwitchViewModel.prototype.onClick = function () {
     if (value > 8) {
         value = 1;
     }
-    this._switch.setValue(value);
+    this._switch.set(value);
+};
+
+SwitchViewModel.prototype.update = function () {
+    this.value(this._switch.get());
 };
