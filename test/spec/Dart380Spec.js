@@ -24,33 +24,33 @@ describe('Dart380', function () {
 
     describe('basic controls', function () {
 
-        it('should start with channel 1', inject(function (switchChannel) {
-            expect(switchChannel.getValue()).toBe(1);
+        it('should start with channel 1', inject(function (channel) {
+            expect(channel.get()).toBe(1);
         }));
 
-        it('should start with mod FR', inject(function (switchMod) {
-            expect(switchMod.getValue()).toBe(1);
-            expect(switchMod.getValue()).toBe(switchMod.FR);
+        it('should start with mod FR', inject(function (mod) {
+            expect(mod.get()).toBe(1);
+            expect(mod.get()).toBe(mod.FR);
         }));
 
-        it('should start with volume 4', inject(function (switchVolume) {
-            expect(switchVolume.getValue()).toBe(4);
+        it('should start with volume 4', inject(function (volume) {
+            expect(volume.get()).toBe(4);
         }));
 
-        it('should fire event when changing volume', inject(function (switchVolume, eventBus) {
+        it('should fire event when changing volume', inject(function (volume, eventBus) {
             // given
             var eventCallback = jasmine.createSpy('eventCallback');
-            eventBus.on('switchVolume.changed', eventCallback);
+            eventBus.on('volume.changed', eventCallback);
 
             // when
-            switchVolume.setValue(switchVolume.getValue()+1);
+            volume.set(volume.get()+1);
 
             // then
             expect(eventCallback).toHaveBeenCalled();
         }));
 
-        it('should start device by changing MOD switch to KLAR', inject(function (switchMod, smallDisplay, eventBus, selfTest) {
-            switchMod.setValue(switchMod.KLAR);
+        it('should start device by changing MOD switch to KLAR', inject(function (mod, smallDisplay, eventBus, selfTest) {
+            mod.set(mod.KLAR);
             expect(smallDisplay.getText()).toBe('TEST');
             jasmine.clock().tick(selfTest.DELAY);
             expect(smallDisplay.getText()).toBe('TEST OK');
@@ -60,24 +60,24 @@ describe('Dart380', function () {
             expect(smallDisplay.getText()).toBe('');
         }));
 
-        it('should NOT start self-test when changing from KLAR to SKYDD', inject(function (switchMod, smallDisplay, eventBus, selfTest) {
+        it('should NOT start self-test when changing from KLAR to SKYDD', inject(function (mod, smallDisplay, eventBus, selfTest) {
             // given
-            switchMod.setValue(switchMod.KLAR); // TEST
+            mod.set(mod.KLAR); // TEST
             jasmine.clock().tick(selfTest.DELAY); // TEST OK
             jasmine.clock().tick(selfTest.DELAY); // NOLLST
             jasmine.clock().tick(selfTest.DELAY); // (empty)
 
             // when
-            switchMod.setValue(switchMod.SKYDD);
+            mod.set(mod.SKYDD);
 
             // then
             expect(smallDisplay.getText()).toBe('');
         }));
 
-        it('should abort self test by changing back to FR', inject(function (switchMod, smallDisplay, eventBus, selfTest) {
-            switchMod.setValue(switchMod.KLAR);
+        it('should abort self test by changing back to FR', inject(function (mod, smallDisplay, eventBus, selfTest) {
+            mod.set(mod.KLAR);
             expect(smallDisplay.getText()).toBe('TEST');
-            switchMod.setValue(switchMod.FR);
+            mod.set(mod.FR);
             expect(smallDisplay.getText()).toBe('');
         }));
 

@@ -6,12 +6,12 @@ describe("RDA", function() {
 
     beforeEach(bootstrapDart380());
 
-    beforeEach(inject(function(switchMod, selfTest, eventBus) {
+    beforeEach(inject(function(mod, selfTest, eventBus) {
         var isReady = false;
         eventBus.on('ready', function () {
             isReady = true;
         });
-        switchMod.set(switchMod.KLAR);
+        mod.set(mod.KLAR);
         while (!isReady) {
             jasmine.clock().tick(1000);
         }

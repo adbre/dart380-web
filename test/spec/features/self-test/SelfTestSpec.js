@@ -2,12 +2,12 @@
 
 require('../../../TestHelper');
 
-describe('features/displays - SelfTest', function () {
+describe('features/self-test', function () {
 
     beforeEach(bootstrapDart380());
 
-    it('should start device by changing MOD switch to KLAR', inject(function (switchMod, smallDisplay, eventBus, selfTest) {
-        switchMod.setValue(switchMod.KLAR);
+    it('should start device by changing MOD switch to KLAR', inject(function (mod, smallDisplay, eventBus, selfTest) {
+        mod.set(mod.KLAR);
         expect(smallDisplay.getText()).toBe('TEST');
         jasmine.clock().tick(selfTest.DELAY);
         expect(smallDisplay.getText()).toBe('TEST OK');
@@ -17,29 +17,29 @@ describe('features/displays - SelfTest', function () {
         expect(smallDisplay.getText()).toBe('');
     }));
 
-    it('should NOT start self-test when changing from KLAR to SKYDD', inject(function (switchMod, smallDisplay, eventBus, selfTest) {
+    it('should NOT start self-test when changing from KLAR to SKYDD', inject(function (mod, smallDisplay, eventBus, selfTest) {
         // given
-        switchMod.setValue(switchMod.KLAR); // TEST
+        mod.set(mod.KLAR); // TEST
         jasmine.clock().tick(selfTest.DELAY); // TEST OK
         jasmine.clock().tick(selfTest.DELAY); // NOLLST
         jasmine.clock().tick(selfTest.DELAY); // (empty)
 
         // when
-        switchMod.setValue(switchMod.SKYDD);
+        mod.set(mod.SKYDD);
 
         // then
         expect(smallDisplay.getText()).toBe('');
     }));
 
-    it('should abort self test by changing back to FR', inject(function (switchMod, smallDisplay, eventBus, selfTest) {
+    it('should abort self test by changing back to FR', inject(function (mod, smallDisplay, eventBus, selfTest) {
 
-        switchMod.setValue(switchMod.KLAR);
+        mod.set(mod.KLAR);
         expect(smallDisplay.getText()).toBe('TEST');
-        switchMod.setValue(switchMod.FR);
+        mod.set(mod.FR);
         expect(smallDisplay.getText()).toBe('');
     }));
 
-    it('should fire selfTest.done upon completion', inject(function (switchMod, smallDisplay, eventBus, selfTest) {
+    it('should fire selfTest.done upon completion', inject(function (mod, smallDisplay, eventBus, selfTest) {
 
         var o = {
             callback: function eventCallback(e) {
@@ -52,14 +52,14 @@ describe('features/displays - SelfTest', function () {
         eventBus.once('selfTest.done', o.callback);
 
         // when
-        switchMod.setValue(switchMod.KLAR); // TEST
+        mod.set(mod.KLAR); // TEST
         jasmine.clock().tick(selfTest.DELAY * 3); // TEST OK, NOLLST, (empty)
 
         // then
         expect(o.callback).toHaveBeenCalled();
     }));
 
-    it('should fire selfTest.done when aborted', inject(function (switchMod, smallDisplay, eventBus, selfTest) {
+    it('should fire selfTest.done when aborted', inject(function (mod, smallDisplay, eventBus, selfTest) {
 
         var o = {
             callback: function eventCallback(e) {
@@ -72,9 +72,9 @@ describe('features/displays - SelfTest', function () {
         eventBus.once('selfTest.done', o.callback);
 
         // when
-        switchMod.setValue(switchMod.KLAR);
+        mod.set(mod.KLAR);
         jasmine.clock().tick(selfTest.DELAY / 2);
-        switchMod.setValue(switchMod.FR);
+        mod.set(mod.FR);
 
         // then
         expect(o.callback).toHaveBeenCalled();

@@ -6,8 +6,8 @@ describe('Tid', function () {
 
     beforeEach(bootstrapDart380());
 
-    beforeEach(inject(function (switchMod, selfTest, eventBus) {
-        switchMod.set(switchMod.KLAR);
+    beforeEach(inject(function (mod, selfTest, eventBus) {
+        mod.set(mod.KLAR);
         jasmine.clock().tick(selfTest.DELAY); // TEST OK
         jasmine.clock().tick(selfTest.DELAY); // NOLLST
         jasmine.clock().tick(selfTest.DELAY); // (empty)

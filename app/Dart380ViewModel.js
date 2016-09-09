@@ -21,9 +21,9 @@ function Dart380ViewModel(dart380) {
     this.textLargeDisplay = ko.observable();
     this.textSmallDisplay = ko.observable();
 
-    this.switchChannel = new SwitchViewModel(dart380.get('switchChannel'), this._eventBus);
-    this.switchMod = new SwitchViewModel(dart380.get('switchMod'), this._eventBus);
-    this.switchVolume = new SwitchViewModel(dart380.get('switchVolume'), this._eventBus);
+    this.channel = new SwitchViewModel(dart380.get('channel'), this._eventBus);
+    this.mod = new SwitchViewModel(dart380.get('mod'), this._eventBus);
+    this.volume = new SwitchViewModel(dart380.get('volume'), this._eventBus);
 }
 
 module.exports = Dart380ViewModel;

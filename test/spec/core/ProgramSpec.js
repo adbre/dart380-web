@@ -6,9 +6,9 @@ describe('core - Program', function () {
 
     beforeEach(bootstrapDart380());
 
-    it('should clear displays when switching to FR', inject(function (switchMod, smallDisplay, largeDisplay, selfTest, program) {
+    it('should clear displays when switching to FR', inject(function (mod, smallDisplay, largeDisplay, selfTest, program) {
         // given
-        switchMod.setValue(switchMod.KLAR);
+        mod.set(mod.KLAR);
         jasmine.clock().tick(selfTest.DELAY);
         jasmine.clock().tick(selfTest.DELAY);
         jasmine.clock().tick(selfTest.DELAY);
@@ -17,7 +17,7 @@ describe('core - Program', function () {
         smallDisplay.setText('BAR');
 
         // when
-        switchMod.setValue(switchMod.FR);
+        mod.set(mod.FR);
 
         // then
         expect(smallDisplay.getText()).toBe('');
