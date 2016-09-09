@@ -82,19 +82,6 @@ describe('Tid', function () {
             expect(smallDisplay.get()).toBe('T:010000');
         }));
 
-        it('should blink the colon to indicate grovtid can be edited', inject(function(smallDisplay) {
-            // then
-            expect(smallDisplay.characters[1].blinking).toBe(true);
-        }));
-
-        it('should reset blinking when closing T: menu', inject(function(smallDisplay, keyboard) {
-            // when
-            keyboard.trigger('⏎');
-
-            // then
-            expect(smallDisplay.characters[1].blinking).toBe(false);
-        }));
-
         describe('editing', function () {
 
             beforeEach(inject(function(keyboard) {
@@ -173,11 +160,6 @@ describe('Tid', function () {
         it('should open DAT: menu', inject(function(keyboard, smallDisplay) {
             // then
             expect(smallDisplay.get()).toBe('DAT:0101');
-        }));
-
-        it('should blink the colon to indicate it can be edited', inject(function(smallDisplay) {
-            // then
-            expect(smallDisplay.characters[3].blinking).toBe(true);
         }));
     });
 
@@ -412,6 +394,178 @@ describe('Tid', function () {
             keyboard.trigger('SLT');
             keyboard.trigger('1');
             expect(smallDisplay.get()).toBe('T:000000');
+        }));
+    });
+
+    describe("TID", function () {
+        it("should navigate TID", inject(function (keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            expect(smallDisplay.toString()).toBe("T:000000");
+            keyboard.trigger('⏎');
+            expect(smallDisplay.toString()).toBe("DAT:0101");
+            keyboard.trigger('⏎');
+            expect(smallDisplay.toString()).toBe("  (TID) ");
+            keyboard.trigger('⏎');
+            expect(smallDisplay.toString()).toBe("        ");
+
+            keyboard.trigger('1');
+            expect(smallDisplay.toString()).toBe("T:000000");
+            keyboard.trigger('SLT');
+            expect(smallDisplay.toString()).toBe("        ");
+
+            keyboard.trigger('1');
+            keyboard.trigger('⏎');
+            expect(smallDisplay.toString()).toBe("DAT:0101");
+            keyboard.trigger('SLT');
+            expect(smallDisplay.toString()).toBe("        ");
+
+            keyboard.trigger('1');
+            keyboard.trigger('⏎');
+            keyboard.trigger('⏎');
+            expect(smallDisplay.toString()).toBe("  (TID) ");
+            keyboard.trigger('SLT');
+            expect(smallDisplay.toString()).toBe("        ");
+        }));
+
+        it("should modify T", inject(function (keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            expect(smallDisplay.toString()).toBe("T:      ");
+            expect(smallDisplay.characters[1].blinking).toBe(true);
+            expect(smallDisplay.characters[2].cursor).toBe(true);
+
+            keyboard.trigger('2');
+            expect(smallDisplay.toString()).toBe("T:2     ");
+            expect(smallDisplay.characters[1].blinking).toBe(true);
+            expect(smallDisplay.characters[2].cursor).toBe(false);
+            expect(smallDisplay.characters[3].cursor).toBe(true);
+
+            keyboard.trigger('0');
+            expect(smallDisplay.toString()).toBe("T:20    ");
+            expect(smallDisplay.characters[1].blinking).toBe(true);
+            expect(smallDisplay.characters[3].cursor).toBe(false);
+            expect(smallDisplay.characters[4].cursor).toBe(true);
+
+            keyboard.trigger('3');
+            expect(smallDisplay.toString()).toBe("T:203   ");
+            expect(smallDisplay.characters[1].blinking).toBe(true);
+            expect(smallDisplay.characters[4].cursor).toBe(false);
+            expect(smallDisplay.characters[5].cursor).toBe(true);
+
+            keyboard.trigger('4');
+            expect(smallDisplay.toString()).toBe("T:2034  ");
+            expect(smallDisplay.characters[1].blinking).toBe(true);
+            expect(smallDisplay.characters[5].cursor).toBe(false);
+            expect(smallDisplay.characters[6].cursor).toBe(true);
+
+            keyboard.trigger('5');
+            expect(smallDisplay.toString()).toBe("T:20345 ");
+            expect(smallDisplay.characters[1].blinking).toBe(true);
+            expect(smallDisplay.characters[6].cursor).toBe(false);
+            expect(smallDisplay.characters[7].cursor).toBe(true);
+
+            keyboard.trigger('6');
+            expect(smallDisplay.toString()).toBe("T:203456");
+            expect(smallDisplay.characters[1].blinking).toBe(true);
+            expect(smallDisplay.characters[7].blinking).toBe(true);
+            expect(smallDisplay.characters[7].cursor).toBe(true);
+
+            keyboard.trigger('⏎');
+            expect(smallDisplay.toString()).toBe("T:203456");
+            expect(smallDisplay.characters[1].blinking).toBe(false);
+            expect(smallDisplay.characters[7].blinking).toBe(false);
+            expect(smallDisplay.characters[7].cursor).toBe(false);
+        }));
+
+        it("should persist T", inject(function (keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.trigger('1');
+            keyboard.trigger('9');
+            keyboard.trigger('2');
+            keyboard.trigger('8');
+            keyboard.trigger('3');
+            keyboard.trigger('7');
+            keyboard.trigger('⏎');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            expect(smallDisplay.toString()).toBe("T:192837");
+        }));
+
+        it("should abort input on SLT", inject(function (keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('ÄND');
+            keyboard.trigger('1');
+            keyboard.trigger('9');
+            keyboard.trigger('2');
+            keyboard.trigger('SLT');
+            expect(smallDisplay.toString()).toBe("T:000000");
+        }));
+
+        it("should modify DAT", inject(function (keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            expect(smallDisplay.toString()).toBe("DAT:    ");
+            expect(smallDisplay.characters[3].blinking).toBe(true);
+            expect(smallDisplay.characters[4].cursor).toBe(true);
+
+            keyboard.trigger('0');
+            expect(smallDisplay.toString()).toBe("DAT:0   ");
+            expect(smallDisplay.characters[3].blinking).toBe(true);
+            expect(smallDisplay.characters[4].cursor).toBe(false);
+            expect(smallDisplay.characters[5].cursor).toBe(true);
+
+            keyboard.trigger('9');
+            expect(smallDisplay.toString()).toBe("DAT:09  ");
+            expect(smallDisplay.characters[3].blinking).toBe(true);
+            expect(smallDisplay.characters[5].cursor).toBe(false);
+            expect(smallDisplay.characters[6].cursor).toBe(true);
+
+            keyboard.trigger('2');
+            expect(smallDisplay.toString()).toBe("DAT:092 ");
+            expect(smallDisplay.characters[3].blinking).toBe(true);
+            expect(smallDisplay.characters[6].cursor).toBe(false);
+            expect(smallDisplay.characters[7].cursor).toBe(true);
+
+            keyboard.trigger('8');
+            expect(smallDisplay.toString()).toBe("DAT:0928");
+            expect(smallDisplay.characters[3].blinking).toBe(true);
+            expect(smallDisplay.characters[6].cursor).toBe(false);
+            expect(smallDisplay.characters[7].cursor).toBe(true);
+
+            keyboard.trigger('⏎');
+            expect(smallDisplay.toString()).toBe("DAT:0928");
+            expect(smallDisplay.characters[3].blinking).toBe(false);
+            expect(smallDisplay.characters[7].blinking).toBe(false);
+            expect(smallDisplay.characters[7].cursor).toBe(false);
+        }));
+
+        it("should abort input of DAT", inject(function (keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.trigger('1');
+            keyboard.trigger('2');
+            keyboard.trigger('3');
+            keyboard.trigger('1');
+            keyboard.trigger('SLT');
+            expect(smallDisplay.toString()).toBe("DAT:0101");
+        }));
+
+        it("should persist DAT", inject(function (keyboard, smallDisplay) {
+            keyboard.trigger('1');
+            keyboard.trigger('⏎');
+            keyboard.trigger('ÄND');
+            keyboard.trigger('1');
+            keyboard.trigger('2');
+            keyboard.trigger('3');
+            keyboard.trigger('1');
+            keyboard.trigger('⏎');
+            keyboard.trigger('SLT');
+            keyboard.trigger('1');
+            keyboard.trigger('⏎');
+            expect(smallDisplay.toString()).toBe("DAT:1231");
         }));
     });
 });
