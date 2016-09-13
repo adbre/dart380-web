@@ -249,18 +249,144 @@ describe("KDA", function() {
 
         expect(largeDisplay.toString()).toBe('TEXT:           ');
 
-        keyboard.triggerMany('LOREM IPSUM');
+        keyboard.triggerMany('BROWN FOX');
 
-        expect(largeDisplay.toString()).toBe('TEXT:LOREM IPSUM');
+        expect(largeDisplay.toString()).toBe('TEXT:BROWN FOX  ');
 
         keyboard.trigger('SLT');
 
-        expect(largeDisplay.toString()).toBe('TEXT:LOREM IPSUM');
+        expect(largeDisplay.toString()).toBe('TEXT:BROWN FOX  ');
         expect(largeDisplay.getCursor()).toBe(-1);
 
         keyboard.trigger('SLT');
 
         expect(largeDisplay.toString()).toBe('                ');
         expect(smallDisplay.toString()).toBe('        ');
+    }));
+
+    it("should auto assign TNR", inject(function (keyboard, largeDisplay, smallDisplay) {
+        // given
+        keyboard.trigger('1');
+        keyboard.trigger('ÄND');
+        keyboard.triggerMany('232547');
+        keyboard.trigger('⏎');
+        keyboard.trigger('SLT');
+
+        // when
+        keyboard.trigger('FMT');
+        keyboard.triggerMany('100'); // FORMAT:100
+        keyboard.trigger('⏎'); // FRI*TEXT*
+        keyboard.trigger('⏎'); // TILL:
+        keyboard.trigger('⏎'); //
+        keyboard.trigger('⏎'); //       *FR:
+
+        // then
+        expect(largeDisplay.toString()).toBe('232547*FR:      ');
+    }));
+
+    it("should auto wrap lines", inject(function (keyboard, largeDisplay, smallDisplay) {
+        // when
+        keyboard.trigger('FMT');
+        keyboard.triggerMany('100'); // FORMAT:100
+        keyboard.trigger('⏎'); // FRI*TEXT*
+        keyboard.trigger('⏎'); // TILL:
+
+        keyboard.trigger('ÄND');
+        keyboard.triggerMany('ABCDEFGHIJKLM');
+
+        // then
+        expect(largeDisplay.toString()).toBe('LM              ');
+    }));
+
+    it("should move UP lines", inject(function (keyboard, largeDisplay, smallDisplay) {
+        // given
+        keyboard.trigger('FMT');
+        keyboard.triggerMany('100'); // FORMAT:100
+        keyboard.trigger('⏎'); // FRI*TEXT*
+        keyboard.trigger('⏎'); // TILL:
+
+        keyboard.trigger('ÄND');
+        keyboard.triggerMany('ABCDEFGHIJKLM');
+
+        // when
+        keyboard.trigger('↑');
+
+        // then
+        expect(largeDisplay.toString()).toBe('TILL:ABCDEFGHIJK');
+    }));
+
+    it("should move DOWN lines", inject(function (keyboard, largeDisplay, smallDisplay) {
+        // given
+        keyboard.trigger('FMT');
+        keyboard.triggerMany('100'); // FORMAT:100
+        keyboard.trigger('⏎'); // FRI*TEXT*
+        keyboard.trigger('⏎'); // TILL:
+
+        keyboard.trigger('ÄND');
+        keyboard.triggerMany('ABCDEFGHIJKLM');
+        keyboard.trigger('↑');
+
+        // when
+        keyboard.trigger('↓');
+
+        // then
+        expect(largeDisplay.toString()).toBe('LM              ');
+    }));
+
+    it("should move cursor LEFT", inject(function (keyboard, largeDisplay, smallDisplay) {
+        // given
+        keyboard.trigger('FMT');
+        keyboard.triggerMany('100'); // FORMAT:100
+        keyboard.trigger('⏎'); // FRI*TEXT*
+        keyboard.trigger('⏎'); // TILL:
+
+        keyboard.trigger('ÄND');
+        keyboard.triggerMany('ABCDEFGHIJKLM');
+
+        // when
+        keyboard.trigger('←');
+        keyboard.trigger('N');
+
+        // then
+        expect(largeDisplay.toString()).toBe('LN              ');
+    }));
+
+    it("should move cursor RIGHT", inject(function (keyboard, largeDisplay, smallDisplay) {
+        // given
+        keyboard.trigger('FMT');
+        keyboard.triggerMany('100'); // FORMAT:100
+        keyboard.trigger('⏎'); // FRI*TEXT*
+        keyboard.trigger('⏎'); // TILL:
+        keyboard.trigger('⏎');
+
+        keyboard.trigger('ÄND');
+
+        // when
+        keyboard.trigger('→');
+        keyboard.triggerMany('ABC');
+
+        // then
+        expect(largeDisplay.toString()).toBe(' ABC            ');
+    }));
+
+    it("should have 16 lines in FMT 100 message", inject(function (keyboard, largeDisplay, smallDisplay) {
+        keyboard.trigger('FMT');
+        keyboard.triggerMany('100');
+
+        expect(largeDisplay.toString()).toBe('FORMAT:100      ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+
+        keyboard.trigger('⏎');
+
+        expect(largeDisplay.toString()).toBe('FRI*TEXT*       ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+
+        for (var i=0; i < 16; i++) {
+            keyboard.trigger('⏎');
+            expect(largeDisplay.toString()).not.toBe('------SLUT------');
+        }
+
+        keyboard.trigger('⏎');
+        expect(largeDisplay.toString()).toBe('------SLUT------');
     }));
 });
