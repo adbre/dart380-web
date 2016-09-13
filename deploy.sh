@@ -8,6 +8,7 @@ function doCompile {
   cp LICENSE out/
   cp README.md out/
   cp index.html out/
+  cp -r assets/ out/assets/
   cp -r dist/ out/dist/
 }
 
