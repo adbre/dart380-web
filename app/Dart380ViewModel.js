@@ -9,7 +9,10 @@ var SwitchViewModel = require('./SwitchViewModel');
 var DisplayViewModel = require('./DisplayViewModel');
 
 function Dart380ViewModel(dart380) {
-    this._dart380 = dart380 = dart380 || new Dart380();
+    this._dart380 = dart380 = dart380 || new Dart380({ modules: [
+        require('./modules')
+    ]});
+
     this._eventBus = dart380.get('eventBus');
     this._smallDisplay = dart380.get('smallDisplay');
     this._largeDisplay = dart380.get('largeDisplay');
