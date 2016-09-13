@@ -40,7 +40,7 @@ describe('Self test', function () {
         expect(smallDisplay.toString()).not.toMatch(/^T:/);
     }));
 
-    xit("should not display NOLLST if entered KDA", inject(function (mod, smallDisplay, selfTest, keyboard) {
+    it("should not display NOLLST if entered KDA", inject(function (mod, smallDisplay, selfTest, keyboard) {
         mod.set(mod.SKYDD);
         jasmine.clock().tick(selfTest.DELAY * 3);
         enterNewPny(keyboard);
