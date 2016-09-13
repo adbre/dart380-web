@@ -148,6 +148,46 @@ describe('Tid', function () {
                 // then
                 expect(smallDisplay.get()).toBe('T:000000');
             }));
+
+            it('should reject incomplete input', inject(function(smallDisplay, keyboard) {
+                // when
+                keyboard.triggerMany('24000');
+                keyboard.trigger('⏎');
+
+                // then
+                expect(smallDisplay.toString()).toBe('T:      ');
+                expect(smallDisplay.getCursor()).toBe(2);
+            }));
+
+            it('should reject more than 23 hours', inject(function(smallDisplay, keyboard) {
+                // when
+                keyboard.triggerMany('240000');
+                keyboard.trigger('⏎');
+
+                // then
+                expect(smallDisplay.toString()).toBe('T:      ');
+                expect(smallDisplay.getCursor()).toBe(2);
+            }));
+
+            it('should reject more than 59 minutes', inject(function(smallDisplay, keyboard) {
+                // when
+                keyboard.triggerMany('236000');
+                keyboard.trigger('⏎');
+
+                // then
+                expect(smallDisplay.toString()).toBe('T:      ');
+                expect(smallDisplay.getCursor()).toBe(2);
+            }));
+
+            it('should reject more than 59 seconds', inject(function(smallDisplay, keyboard) {
+                // when
+                keyboard.triggerMany('235960');
+                keyboard.trigger('⏎');
+
+                // then
+                expect(smallDisplay.toString()).toBe('T:      ');
+                expect(smallDisplay.getCursor()).toBe(2);
+            }));
         });
     });
 
@@ -160,6 +200,182 @@ describe('Tid', function () {
         it('should open DAT: menu', inject(function(keyboard, smallDisplay) {
             // then
             expect(smallDisplay.get()).toBe('DAT:0101');
+        }));
+
+        it('should reject incomplete input', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('010');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject zero month', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0001');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject zero day', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0100');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 12 months', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('1301');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 31 days in January', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0132');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 28 days in February', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0229');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 31 days in March', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0332');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 30 days in April', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0431');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 31 days in May', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0532');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 30 days in June', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0631');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 31 days in July', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0732');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 31 days in August', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0832');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 30 days in September', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('0931');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 31 days in October', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('1032');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 30 days in November', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('1131');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
+        }));
+
+        it('should reject more than 31 days in December', inject(function(smallDisplay, keyboard) {
+            // when
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany('1232');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DAT:    ');
+            expect(smallDisplay.getCursor()).toBe(4);
         }));
     });
 
