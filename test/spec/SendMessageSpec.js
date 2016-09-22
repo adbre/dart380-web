@@ -389,4 +389,45 @@ describe("KDA", function() {
         keyboard.trigger('⏎');
         expect(largeDisplay.toString()).toBe('------SLUT------');
     }));
+
+    it("should automatically enter sender address", inject(function (keyboard, largeDisplay) {
+        // given
+        keyboard.trigger('DDA');
+        keyboard.trigger('ÄND');
+        keyboard.triggerMany('VJ');
+        keyboard.trigger('⏎');
+        keyboard.trigger('SLT');
+
+        // when
+        keyboard.trigger('FMT');
+        keyboard.triggerMany('100');
+        keyboard.trigger('⏎');
+        keyboard.trigger('⏎');
+        keyboard.trigger('ÄND');
+        keyboard.trigger('⏎');
+        keyboard.trigger('⏎');
+
+        // then
+        expect(largeDisplay.toString()).toBe('000000*FR:VJ    ');
+    }));
+
+    it("should automatically enter timestamp", inject(function (keyboard, largeDisplay) {
+        // given
+        keyboard.trigger('1');
+        keyboard.trigger('ÄND');
+        keyboard.triggerMany('123456');
+        keyboard.trigger('⏎');
+        keyboard.trigger('SLT');
+
+        // when
+        keyboard.trigger('FMT');
+        keyboard.triggerMany('100');
+        keyboard.trigger('⏎');
+        keyboard.trigger('⏎');
+        keyboard.trigger('ÄND');
+        keyboard.trigger('⏎');
+        keyboard.trigger('⏎');
+
+        expect(largeDisplay.toString()).toBe('123456*FR:      ');
+    }));
 });
