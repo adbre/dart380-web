@@ -2,9 +2,16 @@
 
 require('../TestHelper');
 
-describe("KDA", function() {
+var MockCommunication = require('../util/MockCommunication');
 
-    beforeEach(bootstrapDart380());
+describe("FMT", function() {
+
+    beforeEach(bootstrapDart380({ modules: [
+        {
+            __init__: ['mockCommunication'],
+            mockCommunication: ['type', MockCommunication]
+        }
+    ]}));
 
     beforeEach(inject(function(mod, selfTest, eventBus) {
         var isReady = false;
@@ -17,417 +24,367 @@ describe("KDA", function() {
         }
     }));
 
-    it("should open message format selection", inject(function (keyboard, largeDisplay, smallDisplay) {
-        keyboard.trigger('FMT');
+    function createFmt100(to, text, tnr) {
+        inject(function (keyboard) {
+            keyboard.trigger('FMT');
+            keyboard.triggerMany('100');
+            keyboard.trigger('⏎'); // FRI*TEXT
+            keyboard.trigger('⏎'); // TILL:
+            keyboard.trigger('ÄND');
+            keyboard.triggerMany(to);
+            keyboard.trigger('⏎'); // (empty)
+            keyboard.trigger('⏎'); // 000000*FR:
+            if (tnr) {
+                keyboard.triggerMany(tnr);
+            }
+            keyboard.trigger('⏎'); // (empty)
+            keyboard.trigger('⏎'); // FRÅN:     *U:
+            keyboard.trigger('⏎'); // TEXT:
+            keyboard.triggerMany(text);
+            keyboard.trigger('SLT');
+            keyboard.trigger('SLT');
+        })();
+    }
 
-        expect(largeDisplay.toString()).toBe('FORMAT:         ');
-        expect(smallDisplay.toString()).toBe('ROT*NIVÅ');
-        expect(largeDisplay.getCursor()).toBe(7);
-        expect(smallDisplay.getCursor()).toBe(-1);
+    beforeEach(inject(function (dda, time) {
+        dda.setAddress('CR');
+        time.setTime('154012');
+        time.setDate('0922');
     }));
 
-    // DART 380 Instruktionsbok Utdrag, sida 25
-    it("Formatnummer saknas", inject(function (keyboard, largeDisplay, smallDisplay) {
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('998');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:998      ');
-        expect(smallDisplay.toString()).toBe('SAKNAS  ');
-    }));
-
-    // DART 380 Instruktionsbok Utdrag, sida 25
-    it("Nummerval av format", inject(function (keyboard, largeDisplay, smallDisplay) {
-        keyboard.trigger('FMT');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:         ');
-        expect(smallDisplay.toString()).toBe('ROT*NIVÅ');
-
-        keyboard.trigger('1');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:1        ');
-        expect(smallDisplay.toString()).toBe('LEDNING ');
-
-        keyboard.trigger('0');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:10       ');
-        expect(smallDisplay.toString()).toBe('LEDNSBTJ');
-
-        keyboard.trigger('3');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:103      ');
-        expect(smallDisplay.toString()).toBe('FÖRBPROV');
-    }));
-
-    // DART 380 Instruktionsbok Utdrag, sida 25
-    it("Söka format i formatträd", inject(function (keyboard, largeDisplay, smallDisplay) {
-        keyboard.trigger('FMT');
-
-        keyboard.trigger('→');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:0        ');
-        expect(smallDisplay.toString()).toBe('RADIOFMT');
-
-        keyboard.trigger('↓');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:1        ');
-        expect(smallDisplay.toString()).toBe('LEDNING ');
-
-        keyboard.trigger('→');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:10       ');
-        expect(smallDisplay.toString()).toBe('LEDNSBTJ');
-
-        keyboard.trigger('→');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:100      ');
-        expect(smallDisplay.toString()).toBe('FRI*TEXT');
-
-        keyboard.trigger('↓');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:101      ');
-        expect(smallDisplay.toString()).toBe('PASS*ALT');
-
-        keyboard.trigger('↓');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:102      ');
-        expect(smallDisplay.toString()).toBe('RANY*KRY');
-
-        keyboard.trigger('↓');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:103      ');
-        expect(smallDisplay.toString()).toBe('FÖRBPROV');
-    }));
-
-    it("Söka format i formatträd (bakåt)", inject(function (keyboard, largeDisplay, smallDisplay) {
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('103');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:103      ');
-        expect(smallDisplay.toString()).toBe('FÖRBPROV');
-
-        keyboard.trigger('↑');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:102      ');
-        expect(smallDisplay.toString()).toBe('RANY*KRY');
-
-        keyboard.trigger('↑');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:101      ');
-        expect(smallDisplay.toString()).toBe('PASS*ALT');
-
-        keyboard.trigger('↑');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:100      ');
-        expect(smallDisplay.toString()).toBe('FRI*TEXT');
-
-        keyboard.trigger('←');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:10       ');
-        expect(smallDisplay.toString()).toBe('LEDNSBTJ');
-
-        keyboard.trigger('←');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:1        ');
-        expect(smallDisplay.toString()).toBe('LEDNING ');
-
-        keyboard.trigger('↑');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:0        ');
-        expect(smallDisplay.toString()).toBe('RADIOFMT');
-
-        keyboard.trigger('←');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:         ');
-        expect(smallDisplay.toString()).toBe('ROT*NIVÅ');
-    }));
-
-    it("should not navigate UP outside format group", inject(function (keyboard, largeDisplay, smallDisplay) {
+    it('should save written message in ISK', inject(function(keyboard, largeDisplay, smallDisplay) {
         // given
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100');
+        createFmt100('RG', 'LOREM IPSUM');
 
         // when
-        keyboard.trigger('↑');
+        keyboard.trigger('ISK');
 
         // then
-        expect(largeDisplay.toString()).toBe('FORMAT:100      ');
+        expect(largeDisplay.toString()).toBe('154012*FR:CR    ');
         expect(smallDisplay.toString()).toBe('FRI*TEXT');
     }));
 
-    it("should not navigate DOWN outside format group", inject(function (keyboard, largeDisplay, smallDisplay) {
+    it('should send message', inject(function(keyboard, largeDisplay, smallDisplay) {
         // given
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('209');
+        createFmt100('RG', 'LOREM IPSUM');
 
         // when
-        keyboard.trigger('↓');
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
 
         // then
-        expect(largeDisplay.toString()).toBe('FORMAT:209      ');
-        expect(smallDisplay.toString()).toBe('FLBASSV2');
+        expect(largeDisplay.toString()).toBe('     SÄNDER     ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
     }));
 
-    it("should not navigate LEFT outside format group", inject(function (keyboard, largeDisplay, smallDisplay) {
+    it('should show when message has been sent', inject(function(keyboard, largeDisplay, smallDisplay, mockCommunication) {
         // given
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100');
+        createFmt100('RG', 'LOREM IPSUM');
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
 
         // when
-        keyboard.trigger('→');
+        mockCommunication.mostRecent().complete();
 
         // then
-        expect(largeDisplay.toString()).toBe('FORMAT:100      ');
+        expect(largeDisplay.toString()).toBe('      SÄNT      ');
         expect(smallDisplay.toString()).toBe('FRI*TEXT');
     }));
 
-    it("should be no-op to press UP when in root format", inject(function (keyboard, largeDisplay, smallDisplay) {
-        keyboard.trigger('FMT');
-        keyboard.trigger('↑');
+    it('should exit all menus on SLT after sending', inject(function(keyboard, largeDisplay, smallDisplay, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
 
-        expect(largeDisplay.toString()).toBe('FORMAT:         ');
-        expect(smallDisplay.toString()).toBe('ROT*NIVÅ');
-    }));
-
-    it("should be no-op to press RIGHT when in root format", inject(function (keyboard, largeDisplay, smallDisplay) {
-        keyboard.trigger('FMT');
-        keyboard.trigger('←');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:         ');
-        expect(smallDisplay.toString()).toBe('ROT*NIVÅ');
-    }));
-
-    it("should be no-op to press DOWN when in root format", inject(function (keyboard, largeDisplay, smallDisplay) {
-        keyboard.trigger('FMT');
-        keyboard.trigger('↓');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:         ');
-        expect(smallDisplay.toString()).toBe('ROT*NIVÅ');
-    }));
-
-    it("should enter message", inject(function (keyboard, largeDisplay, smallDisplay) {
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:100      ');
-        expect(smallDisplay.toString()).toBe('FRI*TEXT');
-
-        keyboard.trigger('⏎');
-
-        expect(largeDisplay.toString()).toBe('FRI*TEXT*       ');
-        expect(smallDisplay.toString()).toBe('FRI*TEXT');
-
-        keyboard.trigger('⏎');
-
-        expect(largeDisplay.toString()).toBe('TILL:           ');
-
-        keyboard.trigger('ÄND');
-
-        expect(largeDisplay.toString()).toBe('TILL:           ');
-        expect(largeDisplay.getCursor()).toBe(5);
-
-        keyboard.triggerMany('VN,VK,ZF');
-
-        expect(largeDisplay.toString()).toBe('TILL:VN,VK,ZF   ');
-
-        keyboard.trigger('⏎');
-
-        expect(largeDisplay.toString()).toBe('                ');
-
-        keyboard.trigger('⏎');
-
-        expect(largeDisplay.toString()).toBe('000000*FR:      ');
-
-        keyboard.trigger('⏎');
-
-        expect(largeDisplay.toString()).toBe('                ');
-
-        keyboard.trigger('⏎');
-
-        expect(largeDisplay.toString()).toBe('FRÅN:     *U:   ');
-
-        keyboard.trigger('⏎');
-
-        expect(largeDisplay.toString()).toBe('TEXT:           ');
-
-        keyboard.triggerMany('BROWN FOX');
-
-        expect(largeDisplay.toString()).toBe('TEXT:BROWN FOX  ');
-
+        // when
+        mockCommunication.mostRecent().complete();
         keyboard.trigger('SLT');
 
-        expect(largeDisplay.toString()).toBe('TEXT:BROWN FOX  ');
-        expect(largeDisplay.getCursor()).toBe(-1);
 
-        keyboard.trigger('SLT');
-
+        // when
         expect(largeDisplay.toString()).toBe('                ');
         expect(smallDisplay.toString()).toBe('        ');
     }));
 
-    it("should auto assign TNR", inject(function (keyboard, largeDisplay, smallDisplay) {
+    it('should display error if in TE', inject(function(mod, keyboard, largeDisplay, smallDisplay) {
         // given
-        keyboard.trigger('1');
-        keyboard.trigger('ÄND');
-        keyboard.triggerMany('232547');
-        keyboard.trigger('⏎');
-        keyboard.trigger('SLT');
+        createFmt100('RG', 'LOREM IPSUM');
+        keyboard.trigger('ISK');
 
         // when
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100'); // FORMAT:100
-        keyboard.trigger('⏎'); // FRI*TEXT*
-        keyboard.trigger('⏎'); // TILL:
-        keyboard.trigger('⏎'); //
-        keyboard.trigger('⏎'); //       *FR:
+        mod.set(mod.TE);
+        keyboard.trigger('SND');
 
         // then
-        expect(largeDisplay.toString()).toBe('232547*FR:      ');
-    }));
-
-    it("should auto wrap lines", inject(function (keyboard, largeDisplay, smallDisplay) {
-        // when
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100'); // FORMAT:100
-        keyboard.trigger('⏎'); // FRI*TEXT*
-        keyboard.trigger('⏎'); // TILL:
-
-        keyboard.trigger('ÄND');
-        keyboard.triggerMany('ABCDEFGHIJKLM');
-
-        // then
-        expect(largeDisplay.toString()).toBe('LM              ');
-    }));
-
-    it("should move UP lines", inject(function (keyboard, largeDisplay, smallDisplay) {
-        // given
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100'); // FORMAT:100
-        keyboard.trigger('⏎'); // FRI*TEXT*
-        keyboard.trigger('⏎'); // TILL:
-
-        keyboard.trigger('ÄND');
-        keyboard.triggerMany('ABCDEFGHIJKLM');
-
-        // when
-        keyboard.trigger('↑');
-
-        // then
-        expect(largeDisplay.toString()).toBe('TILL:ABCDEFGHIJK');
-    }));
-
-    it("should move DOWN lines", inject(function (keyboard, largeDisplay, smallDisplay) {
-        // given
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100'); // FORMAT:100
-        keyboard.trigger('⏎'); // FRI*TEXT*
-        keyboard.trigger('⏎'); // TILL:
-
-        keyboard.trigger('ÄND');
-        keyboard.triggerMany('ABCDEFGHIJKLM');
-        keyboard.trigger('↑');
-
-        // when
-        keyboard.trigger('↓');
-
-        // then
-        expect(largeDisplay.toString()).toBe('LM              ');
-    }));
-
-    it("should move cursor LEFT", inject(function (keyboard, largeDisplay, smallDisplay) {
-        // given
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100'); // FORMAT:100
-        keyboard.trigger('⏎'); // FRI*TEXT*
-        keyboard.trigger('⏎'); // TILL:
-
-        keyboard.trigger('ÄND');
-        keyboard.triggerMany('ABCDEFGHIJKLM');
-
-        // when
-        keyboard.trigger('←');
-        keyboard.trigger('N');
-
-        // then
-        expect(largeDisplay.toString()).toBe('LN              ');
-    }));
-
-    it("should move cursor RIGHT", inject(function (keyboard, largeDisplay, smallDisplay) {
-        // given
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100'); // FORMAT:100
-        keyboard.trigger('⏎'); // FRI*TEXT*
-        keyboard.trigger('⏎'); // TILL:
-        keyboard.trigger('⏎');
-
-        keyboard.trigger('ÄND');
-
-        // when
-        keyboard.trigger('→');
-        keyboard.triggerMany('ABC');
-
-        // then
-        expect(largeDisplay.toString()).toBe(' ABC            ');
-    }));
-
-    it("should have 16 lines in FMT 100 message", inject(function (keyboard, largeDisplay, smallDisplay) {
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100');
-
-        expect(largeDisplay.toString()).toBe('FORMAT:100      ');
+        expect(largeDisplay.toString()).toBe('    FEL MOD     ');
         expect(smallDisplay.toString()).toBe('FRI*TEXT');
-
-        keyboard.trigger('⏎');
-
-        expect(largeDisplay.toString()).toBe('FRI*TEXT*       ');
-        expect(smallDisplay.toString()).toBe('FRI*TEXT');
-
-        for (var i=0; i < 16; i++) {
-            keyboard.trigger('⏎');
-            expect(largeDisplay.toString()).not.toBe('------SLUT------');
-        }
-
-        keyboard.trigger('⏎');
-        expect(largeDisplay.toString()).toBe('------SLUT------');
     }));
 
-    it("should automatically enter sender address", inject(function (keyboard, largeDisplay) {
+    it('should display error if in KLAR', inject(function(mod, keyboard, largeDisplay, smallDisplay) {
         // given
-        keyboard.trigger('DDA');
-        keyboard.trigger('ÄND');
-        keyboard.triggerMany('VJ');
-        keyboard.trigger('⏎');
-        keyboard.trigger('SLT');
+        createFmt100('RG', 'LOREM IPSUM');
+        keyboard.trigger('ISK');
 
         // when
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100');
-        keyboard.trigger('⏎');
-        keyboard.trigger('⏎');
-        keyboard.trigger('ÄND');
-        keyboard.trigger('⏎');
-        keyboard.trigger('⏎');
+        mod.set(mod.KLAR);
+        keyboard.trigger('SND');
 
         // then
-        expect(largeDisplay.toString()).toBe('000000*FR:VJ    ');
+        expect(largeDisplay.toString()).toBe('    FEL MOD     ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
     }));
 
-    it("should automatically enter timestamp", inject(function (keyboard, largeDisplay) {
+    it('should display error if in TD', inject(function(mod, keyboard, largeDisplay, smallDisplay) {
         // given
-        keyboard.trigger('1');
-        keyboard.trigger('ÄND');
-        keyboard.triggerMany('123456');
-        keyboard.trigger('⏎');
-        keyboard.trigger('SLT');
+        createFmt100('RG', 'LOREM IPSUM');
+        keyboard.trigger('ISK');
 
         // when
-        keyboard.trigger('FMT');
-        keyboard.triggerMany('100');
-        keyboard.trigger('⏎');
-        keyboard.trigger('⏎');
-        keyboard.trigger('ÄND');
-        keyboard.trigger('⏎');
-        keyboard.trigger('⏎');
+        mod.set(mod.TD);
+        keyboard.trigger('SND');
 
-        expect(largeDisplay.toString()).toBe('123456*FR:      ');
+        // then
+        expect(largeDisplay.toString()).toBe('    FEL MOD     ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should display error if in NG', inject(function(mod, keyboard, largeDisplay, smallDisplay) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+        keyboard.trigger('ISK');
+
+        // when
+        mod.set(mod.NG);
+        keyboard.trigger('SND');
+
+        // then
+        expect(largeDisplay.toString()).toBe('    FEL MOD     ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should display error if in FmP', inject(function(mod, keyboard, largeDisplay, smallDisplay) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+        keyboard.trigger('ISK');
+
+        // when
+        mod.set(mod.FmP);
+        keyboard.trigger('SND');
+
+        // then
+        expect(largeDisplay.toString()).toBe('    FEL MOD     ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should display error if message does not contain recipent', inject(function(mod, keyboard, largeDisplay, smallDisplay) {
+        // given
+        createFmt100('', 'LOREM IPSUM');
+        keyboard.trigger('ISK');
+
+        // when
+        keyboard.trigger('SND');
+
+        // then
+        expect(largeDisplay.toString()).toBe('   FEL HUVUD    ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should display error if message does not contain timestamp', inject(function(mod, keyboard, largeDisplay, smallDisplay) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM', '      ');
+        keyboard.trigger('ISK');
+
+        // when
+        keyboard.trigger('SND');
+
+        // then
+        expect(largeDisplay.toString()).toBe('   FEL HUVUD    ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should display error if message does not contain sender', inject(function(dda, keyboard, largeDisplay, smallDisplay) {
+        // given
+        dda.setAd('*');
+        createFmt100('RG', 'LOREM IPSUM');
+        keyboard.trigger('ISK');
+
+        // when
+        keyboard.trigger('SND');
+
+        // then
+        expect(largeDisplay.toString()).toBe('   FEL HUVUD    ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should be possible to continue working while message is sending', inject(function(keyboard, largeDisplay, smallDisplay, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+        keyboard.trigger('SLT');
+
+        keyboard.trigger('ISK');
+
+        // then
+        expect(largeDisplay.toString()).toBe('154012*FR:CR    ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should not overwrite display if user pressed SLT before message was finished sending', inject(function(keyboard, largeDisplay, smallDisplay, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+        keyboard.trigger('SLT');
+
+        keyboard.trigger('ISK');
+        mockCommunication.mostRecent().complete();
+
+        // then
+        expect(largeDisplay.toString()).toBe('154012*FR:CR    ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should not overwrite display if user pressed SLT before message was finished sending', inject(function(keyboard, largeDisplay, smallDisplay, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+        keyboard.trigger('SLT');
+
+        keyboard.trigger('ISK');
+        mockCommunication.mostRecent().error();
+
+        // then
+        expect(largeDisplay.toString()).toBe('154012*FR:CR    ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should display error if provider rejects with Mod error', inject(function(keyboard, largeDisplay, smallDisplay, communication, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+        mockCommunication.mostRecent().error(communication.Error.Mod);
+
+        // then
+        expect(largeDisplay.toString()).toBe('    FEL MOD     ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should display error if provider rejects with Header error', inject(function(keyboard, largeDisplay, smallDisplay, communication, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+        mockCommunication.mostRecent().error(communication.Error.Header);
+
+        // then
+        expect(largeDisplay.toString()).toBe('   FEL HUVUD    ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should display error if provider rejects with Busy error', inject(function(keyboard, largeDisplay, smallDisplay, communication, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+        mockCommunication.mostRecent().error(communication.Error.Busy);
+
+        // then
+        expect(largeDisplay.toString()).toBe('    UPPTAGET    ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should display error if provider rejects with Memory error', inject(function(keyboard, largeDisplay, smallDisplay, communication, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+        mockCommunication.mostRecent().error(communication.Error.Memory);
+
+        // then
+        expect(largeDisplay.toString()).toBe('MFULLT EJ LAGRAT');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should display error even if provider rejects with unkown error', inject(function(keyboard, largeDisplay, smallDisplay, communication, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+        mockCommunication.mostRecent().error();
+
+        // then
+        expect(largeDisplay.toString()).toBe('   OKÄNT FEL    ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should display error if communication is busy', inject(function(keyboard, largeDisplay, smallDisplay, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+        keyboard.trigger('SLT');
+
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+
+        // then
+        expect(largeDisplay.toString()).toBe('    UPPTAGET    ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
+    }));
+
+    it('should remove message from ISK when sent', inject(function(keyboard, largeDisplay, smallDisplay, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+        mockCommunication.mostRecent().complete();
+        keyboard.trigger('SLT');
+
+        keyboard.trigger('ISK');
+
+        // then
+        expect(largeDisplay.toString()).toBe('  (INSKRIVNA)   ');
+        expect(smallDisplay.toString()).toBe('        ');
+    }));
+
+    it('should move message to AVS when sent', inject(function(keyboard, largeDisplay, smallDisplay, mockCommunication) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+        mockCommunication.mostRecent().complete();
+        keyboard.trigger('SLT');
+
+        keyboard.trigger('AVS');
+
+        // then
+        expect(largeDisplay.toString()).toBe('154012*FR:CR    ');
+        expect(smallDisplay.toString()).toBe('FRI*TEXT');
     }));
 });
