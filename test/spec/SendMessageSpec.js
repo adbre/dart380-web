@@ -217,6 +217,26 @@ describe("ISK", function() {
         expect(smallDisplay.toString()).toBe('FRI*TEXT');
     }));
 
+    it('should not permanently disable SND on error', inject(function(mod, keyboard, largeDisplay, smallDisplay) {
+        // given
+        createFmt100('RG', 'LOREM IPSUM');
+
+        // when
+        mod.set(mod.KLAR);
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+
+        expect(largeDisplay.toString()).toBe('    FEL MOD     ');
+
+        keyboard.trigger('SLT');
+
+        mod.set(mod.SKYDD);
+        keyboard.trigger('ISK');
+        keyboard.trigger('SND');
+
+        expect(largeDisplay.toString()).toBe('     SÄNDER     ');
+    }));
+
     it('should be possible to continue working while message is sending', inject(function(keyboard, largeDisplay, smallDisplay, mockCommunication) {
         // given
         createFmt100('RG', 'LOREM IPSUM');
