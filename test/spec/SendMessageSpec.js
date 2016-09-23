@@ -4,7 +4,7 @@ require('../TestHelper');
 
 var MockCommunication = require('../util/MockCommunication');
 
-describe("FMT", function() {
+describe("ISK", function() {
 
     beforeEach(bootstrapDart380({ modules: [
         {
@@ -387,4 +387,179 @@ describe("FMT", function() {
         expect(largeDisplay.toString()).toBe('154012*FR:CR    ');
         expect(smallDisplay.toString()).toBe('FRI*TEXT');
     }));
+
+    describe('message selection', function () {
+
+        it('should show most recent message first', inject(function(time, keyboard, largeDisplay, smallDisplay, mockCommunication) {
+            // given
+            createFmt100('AR', 'LOREM IPSUM');
+            time.setTime('160542');
+            createFmt100('BR', 'QUICK BROWN');
+
+            // when
+            keyboard.trigger('ISK');
+
+            // then
+            expect(largeDisplay.toString()).toBe('160542*FR:CR    ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should select next message on ENTER', inject(function(time, keyboard, largeDisplay, smallDisplay, mockCommunication) {
+            // given
+            createFmt100('AR', 'LOREM IPSUM');
+            time.setTime('160542');
+            createFmt100('BR', 'QUICK BROWN');
+
+            // when
+            keyboard.trigger('ISK');
+            keyboard.trigger('⏎');
+
+            // then
+            expect(largeDisplay.toString()).toBe('154012*FR:CR    ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should select next message on page down', inject(function(time, keyboard, largeDisplay, smallDisplay, mockCommunication) {
+            // given
+            createFmt100('AR', 'LOREM IPSUM');
+            time.setTime('160542');
+            createFmt100('BR', 'QUICK BROWN');
+
+            // when
+            keyboard.trigger('ISK');
+            keyboard.trigger('▽');
+
+            // then
+            expect(largeDisplay.toString()).toBe('154012*FR:CR    ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should select previous message on page up', inject(function(time, keyboard, largeDisplay, smallDisplay, mockCommunication) {
+            // given
+            createFmt100('AR', 'LOREM IPSUM');
+            time.setTime('160542');
+            createFmt100('BR', 'QUICK BROWN');
+
+            // when
+            keyboard.trigger('ISK');
+            keyboard.trigger('▽');
+            keyboard.trigger('△');
+
+            // then
+            expect(largeDisplay.toString()).toBe('160542*FR:CR    ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should not navigate beyond first message on page up', inject(function(time, keyboard, largeDisplay, smallDisplay, mockCommunication) {
+            // given
+            createFmt100('AR', 'LOREM IPSUM');
+            time.setTime('160542');
+            createFmt100('BR', 'QUICK BROWN');
+
+            // when
+            keyboard.trigger('ISK');
+            keyboard.trigger('△');
+            keyboard.trigger('▽');
+
+            // then
+            expect(largeDisplay.toString()).toBe('154012*FR:CR    ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+
+        it('should not navigate beyond end of records on page down', inject(function(time, keyboard, largeDisplay, smallDisplay, mockCommunication) {
+            // given
+            createFmt100('AR', 'LOREM IPSUM');
+            time.setTime('160542');
+            createFmt100('BR', 'QUICK BROWN');
+
+            // when
+            keyboard.trigger('ISK');
+            keyboard.trigger('▽');
+            keyboard.trigger('▽');
+            keyboard.trigger('▽');
+            keyboard.trigger('△');
+
+            // then
+            expect(largeDisplay.toString()).toBe('154012*FR:CR    ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+    });
+
+    describe('message navigation', function () {
+
+        it('should display previous line in message on UP', inject(function(keyboard, largeDisplay, smallDisplay) {
+            // given
+            createFmt100('AR', 'LOREM IPSUM');
+
+            // when
+            keyboard.trigger('ISK');
+            keyboard.trigger('↑');
+            keyboard.trigger('↑');
+
+            // then
+            expect(largeDisplay.toString()).toBe('TILL:AR         ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should not navigate beyond first line in message on UP', inject(function(keyboard, largeDisplay, smallDisplay) {
+            // given
+            createFmt100('AR', 'LOREM IPSUM');
+
+            // when
+            keyboard.trigger('ISK');
+            keyboard.trigger('↑');
+            keyboard.trigger('↑');
+            keyboard.trigger('↑');
+
+            // then
+            expect(largeDisplay.toString()).toBe('TILL:AR         ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should display next line in message on DOWN', inject(function(keyboard, largeDisplay, smallDisplay) {
+            // given
+            createFmt100('AR', 'LOREM IPSUM');
+
+            // when
+            keyboard.trigger('ISK');
+            keyboard.trigger('↓');
+            keyboard.trigger('↓');
+            keyboard.trigger('↓');
+
+            // then
+            expect(largeDisplay.toString()).toBe('TEXT:LOREM IPSUM');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should display end of message', inject(function(keyboard, largeDisplay, smallDisplay) {
+            // given
+            createFmt100('AR', 'LOREM IPSUM');
+
+            // when
+            keyboard.trigger('ISK');
+            for (var i=0; i < 14; i++)
+                keyboard.trigger('↓');
+
+            // then
+            expect(largeDisplay.toString()).toBe('------SLUT------');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should not navigate beyond end of message on DOWN', inject(function(keyboard, largeDisplay, smallDisplay) {
+            // given
+            createFmt100('AR', 'LOREM IPSUM');
+
+            // when
+            keyboard.trigger('ISK');
+            for (var i=0; i < 14; i++)
+                keyboard.trigger('↓');
+            keyboard.trigger('↓');
+
+            // then
+            expect(largeDisplay.toString()).toBe('------SLUT------');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+    });
 });
