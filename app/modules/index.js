@@ -1,4 +1,5 @@
 module.exports = {
-    __init__: ['soundEffects'],
-    soundEffects: ['type', require('./SoundEffects')]
+    __init__: ['soundEffects', 'signalrCommunication'],
+    soundEffects: ['type', require('./SoundEffects')],
+    signalrCommunication: ['type', require('./SignalRCommunication')]
 };

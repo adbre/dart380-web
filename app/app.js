@@ -1,5 +1,9 @@
 'use strict';
 
+global.jQuery = require('jquery');
+global.$ = global.jQuery;
+require('signalr');
+
 var $ = require('jquery'),
     _ = require('lodash'),
     ko = require('knockout');
