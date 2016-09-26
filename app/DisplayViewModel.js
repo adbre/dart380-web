@@ -94,7 +94,7 @@ function Character(char) {
     };
 
     this.update = function () {
-        this.text(char.text);
+        this.text(char.text || ' ');
         this.cursor(char.cursor);
         this.blinking(char.blinking);
     };
