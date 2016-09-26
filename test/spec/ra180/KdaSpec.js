@@ -195,10 +195,8 @@ describe("KDA", function() {
         expect(smallDisplay.toString()).toBe("        ");
     }));
 
-    it("should allow modification of SYNK when in sync", inject(function(keyboard, smallDisplay, kdaMenu, memory) {
-        var kda = memory.get('kda');
-        kda[0].synk = true;
-        memory.set('kda', kda);
+    it("should allow modification of SYNK when in sync", inject(function(kda, keyboard, smallDisplay, kdaMenu, memory) {
+        kda.setSynk(true);
 
         keyboard.trigger('4');
         keyboard.trigger('⏎');
