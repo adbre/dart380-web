@@ -12,13 +12,19 @@ function MockCommunication(communication) {
 
 module.exports = MockCommunication;
 
+MockCommunication.module = {
+    __init__: ['mockCommunication'],
+    mockCommunication: ['type', MockCommunication]
+};
+
 MockCommunication.$inject = ['communication'];
 
-MockCommunication.prototype.send = function (message) {
+MockCommunication.prototype.send = function (message, context) {
     var self = this;
     return new Promise(function (resolve, reject) {
         var request = {
             message: message,
+            context: context,
             complete: resolve,
             error: reject,
             errorMod: function () {

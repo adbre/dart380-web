@@ -46,10 +46,11 @@ describe("ISK", function() {
         })();
     }
 
-    beforeEach(inject(function (dda, time) {
+    beforeEach(inject(function (dda, time, kda) {
         dda.setAddress('CR');
         time.setTime('154012');
         time.setDate('0922');
+        kda.setActiveKey({ groups: [1111, 1111, 1111, 1111, 1111, 1111, 1111, 1111], checksum: '000' });
     }));
 
     it('should save written message in ISK', inject(function(keyboard, largeDisplay, smallDisplay) {
@@ -407,6 +408,31 @@ describe("ISK", function() {
         expect(largeDisplay.toString()).toBe('154012*FR:CR    ');
         expect(smallDisplay.toString()).toBe('FRI*TEXT');
     }));
+
+    describe('without active key', function () {
+        beforeEach(inject(function (kda, keyboard) {
+            createFmt100('RG', 'LOREM IPSUM');
+            kda.setActiveKey(null);
+            keyboard.trigger('ISK');
+            keyboard.trigger('SND');
+        }));
+
+        it('should send message even without active key', inject(function(largeDisplay, smallDisplay) {
+            // then
+            expect(largeDisplay.toString()).toBe('   NÖDSÄNDER    ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should send message even without active key', inject(function(largeDisplay, smallDisplay, mockCommunication) {
+            // when
+            mockCommunication.mostRecent().complete();
+
+            // then
+            expect(largeDisplay.toString()).toBe('    NÖDSÄNT     ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+    });
 
     describe('message selection', function () {
 
