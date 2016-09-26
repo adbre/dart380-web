@@ -17,6 +17,7 @@ function Dart380ViewModel(dart380) {
     this._smallDisplay = dart380.get('smallDisplay');
     this._largeDisplay = dart380.get('largeDisplay');
     this._keyboard = dart380.get('keyboard');
+    this._mod = dart380.get('mod');
 
     this.largeDisplay = new DisplayViewModel(this._largeDisplay, this._eventBus);
     this.smallDisplay = new DisplayViewModel(this._smallDisplay, this._eventBus);
@@ -25,7 +26,7 @@ function Dart380ViewModel(dart380) {
     this.textSmallDisplay = ko.observable();
 
     this.channel = new SwitchViewModel(dart380.get('channel'), this._eventBus);
-    this.mod = new SwitchViewModel(dart380.get('mod'), this._eventBus);
+    this.mod = new SwitchViewModel(this._mod, this._eventBus);
     this.volume = new SwitchViewModel(dart380.get('volume'), this._eventBus);
 
     this._eventBus.on(['channel.changed', 'mod.changed', 'volume.changed'], function () {
@@ -70,6 +71,21 @@ Dart380ViewModel.prototype.activate = function (view) {
         else if (shiftValue && $shiftKey.hasClass('active')) {
             $shiftKey.removeClass('active');
             me.sendKey(shiftValue);
+        } else if (value === 'T' && me._mod.get() === 1) {
+            me._eventBus.once('on', function () {
+                setTimeout(function () {
+                    me._keyboard.up('T');
+                    $(button).removeClass('active');
+                }, 0);
+            });
+            if (me._keyboard.isDown('T')) {
+                me._keyboard.up('T');
+                $(button).removeClass('active');
+            }
+            else {
+                me._keyboard.down('T');
+                $(button).addClass('active');
+            }
         } else {
             me.sendKey(value);
         }
