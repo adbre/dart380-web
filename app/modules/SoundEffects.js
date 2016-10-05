@@ -17,7 +17,7 @@ function SoundEffects(eventBus, communication) {
         }
     });
 
-    eventBus.on('opmtn.play', function () {
+    eventBus.on('opm.opmtn.play', function () {
         self.play(sounds.opm);
     });
 
