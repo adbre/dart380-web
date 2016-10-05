@@ -14,13 +14,9 @@ function SignalRCommunication(communication, eventBus) {
         communication.receive(JSON.parse(message));
     }.bind(this);
 
-    eventBus.on('communication.context.changed', function (e) {
-        this._changeContext(e.context);
-    }.bind(this));
-
     $.connection.hub.start().done(function () {
         this._isHubReady = true;
-        this._changeContext(this._currentContext);
+        this.beginReceive(this._currentContext);
     }.bind(this));
 
     communication.registerProvider(this);
@@ -45,7 +41,7 @@ SignalRCommunication.prototype.send = function (message, context) {
     }.bind(this));
 };
 
-SignalRCommunication.prototype._changeContext = function (context) {
+SignalRCommunication.prototype.beginReceive = function (context) {
     if (!this._isHubReady) {
         return;
     }
