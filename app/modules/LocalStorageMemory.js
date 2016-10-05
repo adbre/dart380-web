@@ -2,7 +2,7 @@
 
 var inherits = require('inherits');
 
-var Memory = require('../../lib/features/memory/Memory');
+var Memory = require('dart380-js/lib/features/memory/Memory');
 
 function LocalStorageMemory(injector) {
     injector.invoke(Memory, this);

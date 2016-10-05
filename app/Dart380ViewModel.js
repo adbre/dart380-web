@@ -4,7 +4,7 @@ var $ = require('jquery'),
     _ = require('lodash'),
     ko = require('knockout');
 
-var Dart380 = require('../lib/Dart380');
+var Dart380 = require('dart380-js/lib/Dart380');
 var SwitchViewModel = require('./SwitchViewModel');
 var DisplayViewModel = require('./DisplayViewModel');
 
