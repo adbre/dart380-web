@@ -1,5 +1,7 @@
 'use strict';
 
+var _ = require('lodash');
+
 require('../../../TestHelper');
 
 var MockCommunication = require('../../../util/MockCommunication');
@@ -71,6 +73,16 @@ describe("communication", function() {
             '------SLUT------',
         ];
 
+        function withRecipent(recipent, message) {
+            if (_.isArray(recipent)) {
+                recipent = recipent.join(',');
+            }
+            message = message.slice();
+            message[1] = _.padEnd(message[1].substr(0, 5) + recipent.substr(0, 11), 16);
+            message[2] = _.padEnd(recipent.substr(11), 16);
+            return message;
+        }
+
         it('should receive message in EKV', inject(function (communication, keyboard, largeDisplay, smallDisplay) {
             // given
             communication.receive(message);
@@ -92,6 +104,128 @@ describe("communication", function() {
 
             // then
             expect(eventHandler).toHaveBeenCalled();
+        }));
+
+        it('should add opm-message when received message', inject(function (communication, keyboard, smallDisplay) {
+            // given
+            communication.receive(message);
+
+            // when
+            keyboard.trigger('OPM');
+
+            // then
+            expect(smallDisplay.toString()).toBe('DATAMEDD');
+        }));
+
+        it('should NOT receive message in EKV when not addressed to us', inject(function (communication, keyboard, largeDisplay, smallDisplay) {
+            // given
+            communication.receive(withRecipent('AR', message));
+
+            // when
+            keyboard.trigger('EKV');
+
+            // then
+            expect(largeDisplay.toString()).toBe('(MOTT EJ KVITT) ');
+            expect(smallDisplay.toString()).toBe('        ');
+        }));
+
+        it('should NOT fire event', inject(function (communication, eventBus) {
+            var eventHandler = jasmine.createSpy('eventHandler');
+            eventBus.on('communication.received', eventHandler);
+
+            // when
+            communication.receive(withRecipent('AR', message));
+
+            // then
+            expect(eventHandler).not.toHaveBeenCalled();
+        }));
+
+        it('should NOT add opm-message', inject(function (communication, keyboard, smallDisplay) {
+            // given
+            communication.receive(withRecipent('AR', message));
+
+            // when
+            keyboard.trigger('OPM');
+
+            // then
+            expect(smallDisplay.toString()).not.toBe('DATAMEDD');
+        }));
+
+        it('should receive message in EKV when our address is *', inject(function (communication, dda, keyboard, largeDisplay, smallDisplay) {
+            // given
+            dda.setAddress('*');
+            communication.receive(withRecipent(['AR', 'BR', 'CR'], message));
+
+            // when
+            keyboard.trigger('EKV');
+
+            // then
+            expect(largeDisplay.toString()).toBe('154012*FR:RG    ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should receive message sent to any recipent with two characters, when our address is **', inject(function (communication, dda, keyboard, largeDisplay, smallDisplay) {
+            // given
+            dda.setAddress('**');
+            communication.receive(withRecipent('AR', message));
+
+            // when
+            keyboard.trigger('EKV');
+
+            // then
+            expect(largeDisplay.toString()).toBe('154012*FR:RG    ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should NOT receive message sent to any recipent with three characters, when our address is **', inject(function (communication, dda, keyboard, largeDisplay, smallDisplay) {
+            // given
+            dda.setAddress('**');
+            communication.receive(withRecipent('ABC', message));
+
+            // when
+            keyboard.trigger('EKV');
+
+            // then
+            expect(largeDisplay.toString()).toBe('(MOTT EJ KVITT) ');
+            expect(smallDisplay.toString()).toBe('        ');
+        }));
+
+        it('should receive message sent to a recipent matching our address mask', inject(function (communication, dda, keyboard, largeDisplay, smallDisplay) {
+            // given
+            dda.setAddress('CR*');
+            communication.receive(withRecipent('CR1', message));
+
+            // when
+            keyboard.trigger('EKV');
+
+            // then
+            expect(largeDisplay.toString()).toBe('154012*FR:RG    ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
+        }));
+
+        it('should NOT receive message sent to a recipent NOT matching our address mask', inject(function (communication, dda, keyboard, largeDisplay, smallDisplay) {
+            // given
+            dda.setAddress('CR*');
+            communication.receive(withRecipent('AR1', message));
+
+            // when
+            keyboard.trigger('EKV');
+
+            // then
+            expect(largeDisplay.toString()).toBe('(MOTT EJ KVITT) ');
+            expect(smallDisplay.toString()).toBe('        ');
+        }));
+
+        it('should receive message in EKV when addressed to many, including us', inject(function (communication, keyboard, largeDisplay, smallDisplay) {
+            // given
+            communication.receive(withRecipent(['AR', 'BR', 'CR'], message));
+
+            // when
+            keyboard.trigger('EKV');
+
+            // then
+            expect(largeDisplay.toString()).toBe('154012*FR:RG    ');
+            expect(smallDisplay.toString()).toBe('FRI*TEXT');
         }));
 
     });
