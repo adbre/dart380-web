@@ -50,6 +50,11 @@ Dart380ViewModel.prototype.activate = function (view) {
         e.preventDefault();
     });
 
+    $(view).find("a.reset").click(function (e) {
+        me._keyboard.trigger('RESET');
+        e.preventDefault();
+    });
+
     $(view).find("button").click(function (event) {
         var button = this, value, shiftValue;
         if (button.children.length == 2) {

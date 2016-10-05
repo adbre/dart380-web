@@ -322,6 +322,14 @@ $borderWidth: 0.15em;
         background-color: $metallicBlack;
         margin-top: 1em;
 
+        a.reset {
+            text-decoration: none;
+
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
         button {
             background-color: $metallicBlack;
             border: $borderWidth $black solid;
