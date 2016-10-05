@@ -70,6 +70,6 @@ module.exports = function (grunt) {
     });
 
     grunt.registerTask('build', ['sass','browserify:app']);
-    grunt.registerTask('auto-build', ['browserSync', 'browserify:watch', 'watch']);
+    grunt.registerTask('auto-build', ['sass', 'browserSync', 'browserify:watch', 'watch']);
     grunt.registerTask('default', ['build']);
 };
