@@ -74,7 +74,7 @@ Dart380ViewModel.prototype.activate = function (view) {
             value = button.innerText;
         }
 
-        value = value.trim();
+        value = value.trim() || ' ';
 
         if (value === me._keyboard.keys.shift.text) {
             $shiftKey.toggleClass('active');
