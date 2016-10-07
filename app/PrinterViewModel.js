@@ -33,7 +33,7 @@ PrinterViewModel.prototype.print = function (message) {
         if (end - start > 0) {
             text(text() + messageText.substring(start, end));
         }
-    },100);
+    }, 50);
     this.messages.push(text);
     return Promise.resolve();
 };
