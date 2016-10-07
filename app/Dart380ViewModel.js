@@ -10,7 +10,11 @@ var DisplayViewModel = require('./DisplayViewModel');
 
 function Dart380ViewModel(dart380) {
     this._dart380 = dart380 = dart380 || new Dart380({ modules: [
-        require('./modules')
+        require('./modules'),
+        {
+            __init__: ['printerViewModel'],
+            printerViewModel: ['type', require('./PrinterViewModel')]
+        }
     ]});
 
     this._eventBus = dart380.get('eventBus');
@@ -18,6 +22,8 @@ function Dart380ViewModel(dart380) {
     this._largeDisplay = dart380.get('largeDisplay');
     this._keyboard = dart380.get('keyboard');
     this._mod = dart380.get('mod');
+
+    this.printer = dart380.get('printerViewModel');
 
     this.largeDisplay = new DisplayViewModel(this._largeDisplay, this._eventBus);
     this.smallDisplay = new DisplayViewModel(this._smallDisplay, this._eventBus);

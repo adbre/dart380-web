@@ -493,4 +493,18 @@ $borderWidth: 0.15em;
 
     } // .keyboard
 
+
+    .printer {
+        position: absolute;
+        bottom: 0em;
+        right: 1em;
+
+        background-color: rgb(255, 252, 206);
+        color: black;
+
+        .message {
+            padding: 0.5em;
+        }
+    }
+
 } // .dart380

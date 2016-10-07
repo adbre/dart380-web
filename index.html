@@ -358,6 +358,13 @@
               </script>
             </div>
           </div>
+
+
+          <div class="printer" data-bind="with: printer">
+            <div data-bind="foreach: messages">
+              <div class="message"><pre data-bind="text: $data"></pre></div>
+            </div>
+          </div>
         </div>
       <script src="dist/app.js"></script>
       <script src="signalr/hubs"></script>
