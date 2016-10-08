@@ -7,7 +7,7 @@ var $ = require('jquery'),
 function DisplayViewModel(display, eventBus) {
     this._display = display;
 
-    this.hidden = ko.observable(display.hidden);
+    this.blink = ko.observable(false);
 
     this.characters = _.map(display.characters, function (c) {
         return new Character(c);
@@ -15,18 +15,20 @@ function DisplayViewModel(display, eventBus) {
 
     this.css = ko.pureComputed(function () {
         return {
-            hidden: this.hidden()
+            blink: this.blink()
         };
     }, this);
 
     eventBus.on(display.name+'.changed', this._onDisplayChanged.bind(this));
+
+    setInterval(function () {
+        this.blink(!this.blink());
+    }.bind(this), 250);
 }
 
 module.exports = DisplayViewModel;
 
 DisplayViewModel.prototype._onDisplayChanged = function () {
-    this.hidden(this._display.hidden);
-
     _.forEach(this.characters, function (c, index) {
         c.update();
     });
@@ -34,69 +36,21 @@ DisplayViewModel.prototype._onDisplayChanged = function () {
 
 
 function Character(char) {
-    var cursor = false,
-        blinking = false,
-        underline = ko.observable(false),
-        hidden = ko.observable(false),
-        updateInterval;
-
-    function startUpdates() {
-        if (updateInterval) {
-            return;
-        }
-        underline(false);
-        hidden(blinking && true);
-        updateInterval = setInterval(function () {
-            if (cursor) {
-                underline(!underline());
-            }
-            if (blinking) {
-                hidden(!hidden());
-            }
-        }, 250);
-    }
-
-    function endUpdates() {
-        if (!updateInterval) {
-            return;
-        }
-        clearInterval(updateInterval);
-        updateInterval = null;
-        underline(false);
-        hidden(false);
-    }
-
-    function startOrStopUpdates() {
-        if (cursor || blinking) {
-            startUpdates();
-        }
-        else {
-            endUpdates();
-        }
-    }
-
     this.text = ko.observable('');
+    this.cursor = ko.observable(false);
+    this.blinking = ko.observable(false);
+
     this.css = ko.pureComputed(function () {
         return {
-            hidden: hidden(),
-            underline: underline()
+            blinking: this.blinking(),
+            cursor: this.cursor()
         };
-    });
-
-    this.cursor = function (enable) {
-        cursor = enable;
-        startOrStopUpdates();
-    };
-
-    this.blinking = function (enable) {
-        blinking = enable;
-        startOrStopUpdates();
-    };
+    }, this);
 
     this.update = function () {
         this.text(char.text || ' ');
-        this.cursor(char.cursor);
-        this.blinking(char.blinking);
+        this.cursor(!!char.cursor);
+        this.blinking(!!char.blinking);
     };
 
     this.update();
