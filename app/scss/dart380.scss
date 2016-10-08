@@ -291,13 +291,13 @@ $borderWidth: 0.15em;
             > .display {
                 margin: 1em;
 
-                &.display-large { flex-grow: 2; min-width: 16em; }
-                &.display-small { flex-grow: 1; min-width: 11em; }
+                &.display-large { flex-grow: 2; }
+                &.display-small { flex-grow: 1; }
 
                 > .text {
                     color: $displayLedForeground;
                     font-size: 2em;
-                    font-family: "Lucida Console", Monaco, monospace;
+                    font-family: "Courier New", monospace;
                     margin: 0;
                     padding-top: 0.3em;
                     padding-left: 1em;
