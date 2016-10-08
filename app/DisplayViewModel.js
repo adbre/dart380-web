@@ -53,7 +53,7 @@ function Character(char) {
             if (blinking) {
                 hidden(!hidden());
             }
-        }, 750);
+        }, 250);
     }
 
     function endUpdates() {
