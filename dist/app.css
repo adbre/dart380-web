@@ -1,0 +1,411 @@
+* {
+  box-sizing: border-box; }
+
+.dart380 {
+  background-color: #716c59;
+  margin-left: auto;
+  margin-right: auto;
+  font-weight: bolder;
+  font-family: Arial;
+  color: white;
+  border-radius: 0.5em;
+  display: flex;
+  max-width: 70em;
+  /* #### Mobile Phones Portrait #### */
+  /* #### Mobile Phones Landscape #### */
+  /* #### Mobile Phones Portrait or Landscape #### */
+  /* #### iPhone 4+ Portrait or Landscape #### */
+  /* #### iPhone 5 Portrait or Landscape #### */
+  /* #### iPhone 6 and 6 plus Portrait or Landscape #### */
+  /* #### Tablets Portrait or Landscape #### */
+  /* #### Desktops #### */ }
+  @media screen and (max-device-width: 480px) and (orientation: portrait) {
+    .dart380 {
+      zoom: 0.8; } }
+  @media screen and (max-device-width: 640px) and (orientation: landscape) {
+    .dart380 {
+      zoom: 0.8; } }
+  @media screen and (max-device-width: 640px) {
+    .dart380 {
+      zoom: 0.8; } }
+  @media screen and (min-device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) {
+    .dart380 {
+      zoom: 0.7; } }
+  @media screen and (min-device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) and (orientation: landscape) {
+    .dart380 {
+      zoom: 0.6; } }
+  @media (device-height: 568px) and (device-width: 320px) and (-webkit-min-device-pixel-ratio: 2) {
+    .dart380 {
+      zoom: 0.8; } }
+  @media (min-device-height: 667px) and (min-device-width: 375px) and (-webkit-min-device-pixel-ratio: 3) {
+    .dart380 {
+      zoom: 0.8; } }
+  @media (min-device-height: 667px) and (min-device-width: 375px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: portrait) {
+    .dart380 {
+      zoom: 0.7; } }
+  @media screen and (min-device-width: 768px) and (max-device-width: 1024px) {
+    .dart380 {
+      zoom: 0.7; } }
+  @media screen and (min-device-width: 768px) and (max-device-width: 1024px) and (orientation: portrait) {
+    .dart380 {
+      zoom: 0.5; } }
+  @media screen and (min-width: 1024px) {
+    .dart380 {
+      zoom: 0.9; } }
+  .dart380 .dart380-connections {
+    background-color: black;
+    width: 4em; }
+  .dart380 .panel, .dart380.panel {
+    border-radius: 0.5em;
+    padding: 0.5em; }
+  .dart380 .mid {
+    padding: 0.5em;
+    margin: 0.5em;
+    width: 59em; }
+  .dart380 .right {
+    background-color: #635e4e;
+    border: 0.2em solid #373236;
+    border-right: none;
+    border-top-left-radius: 0.5em;
+    border-bottom-left-radius: 0.5em;
+    margin-left: 0.5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-right: 0;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column; }
+    .dart380 .right .switches {
+      margin-top: auto;
+      background-color: #343033;
+      border-radius: 0.5em;
+      padding: 0.5em;
+      height: 37em; }
+      .dart380 .right .switches .switch {
+        position: relative;
+        height: 10em; }
+        .dart380 .right .switches .switch p {
+          text-align: center; }
+        .dart380 .right .switches .switch:before {
+          position: absolute;
+          height: 6em;
+          width: 6em;
+          border: 1px dotted white;
+          border-radius: 50%;
+          top: 2em;
+          left: 1.2em; }
+        .dart380 .right .switches .switch label {
+          font-size: 0.6em;
+          position: absolute;
+          cursor: pointer; }
+          .dart380 .right .switches .switch label:hover {
+            color: yellow;
+            text-decoration: underline; }
+          .dart380 .right .switches .switch label input[type=radio] {
+            display: block;
+            opacity: 0; }
+        .dart380 .right .switches .switch .knob {
+          position: absolute;
+          top: 0.5em;
+          width: 9em;
+          height: 10em;
+          display: flex;
+          justify-content: center;
+          align-items: center; }
+        .dart380 .right .switches .switch svg {
+          cursor: pointer;
+          width: 100;
+          height: 100; }
+          .dart380 .right .switches .switch svg .base {
+            fill: #545143; }
+          .dart380 .right .switches .switch svg .handle {
+            fill: #716c59; }
+          .dart380 .right .switches .switch svg .screw {
+            fill: #1c1a1c; }
+          .dart380 .right .switches .switch svg .marker {
+            fill: #e6e6e6; }
+          .dart380 .right .switches .switch svg:hover .base {
+            fill: #8e876f; }
+          .dart380 .right .switches .switch svg.value-1 {
+            transform: rotate(-125deg); }
+          .dart380 .right .switches .switch svg.value-2 {
+            transform: rotate(-90deg); }
+          .dart380 .right .switches .switch svg.value-3 {
+            transform: rotate(-55deg); }
+          .dart380 .right .switches .switch svg.value-4 {
+            transform: rotate(-20deg); }
+          .dart380 .right .switches .switch svg.value-5 {
+            transform: rotate(15deg); }
+          .dart380 .right .switches .switch svg.value-6 {
+            transform: rotate(55deg); }
+          .dart380 .right .switches .switch svg.value-7 {
+            transform: rotate(90deg); }
+          .dart380 .right .switches .switch svg.value-8 {
+            transform: rotate(125deg); }
+        .dart380 .right .switches .switch label:nth-child(1) {
+          top: 10em;
+          left: 2em; }
+        .dart380 .right .switches .switch label:nth-child(2) {
+          top: 6em;
+          left: 1em; }
+        .dart380 .right .switches .switch label:nth-child(3) {
+          top: 3em;
+          left: 2em; }
+        .dart380 .right .switches .switch label:nth-child(4) {
+          top: 0.8em;
+          left: 5em; }
+        .dart380 .right .switches .switch label:nth-child(5) {
+          top: 0.8em;
+          left: 8.5em; }
+        .dart380 .right .switches .switch label:nth-child(6) {
+          top: 3em;
+          left: 11.5em; }
+        .dart380 .right .switches .switch label:nth-child(7) {
+          top: 6em;
+          left: 12.5em; }
+        .dart380 .right .switches .switch label:nth-child(8) {
+          top: 10em;
+          left: 11.5em; }
+        .dart380 .right .switches .switch:nth-child(2) label:nth-child(1) {
+          left: 1.5em; }
+        .dart380 .right .switches .switch:nth-child(2) label:nth-child(2) {
+          left: 0.4em; }
+        .dart380 .right .switches .switch:nth-child(2) label:nth-child(3) {
+          top: 2.5em;
+          left: 0; }
+        .dart380 .right .switches .switch:nth-child(2) label:nth-child(4) {
+          top: 0.5em;
+          left: 2.5em; }
+        .dart380 .right .switches .switch:nth-child(2) label:nth-child(5) {
+          top: 0.5em;
+          left: 7.5em; }
+        .dart380 .right .switches .switch:nth-child(2) label:nth-child(3) span,
+        .dart380 .right .switches .switch:nth-child(2) label:nth-child(4) span,
+        .dart380 .right .switches .switch:nth-child(2) label:nth-child(5) span {
+          position: relative; }
+          .dart380 .right .switches .switch:nth-child(2) label:nth-child(3) span:after,
+          .dart380 .right .switches .switch:nth-child(2) label:nth-child(4) span:after,
+          .dart380 .right .switches .switch:nth-child(2) label:nth-child(5) span:after {
+            position: absolute;
+            content: '*';
+            top: 1em;
+            right: 0.5em;
+            color: white; }
+        .dart380 .right .switches .switch:nth-child(2) label:nth-child(5) span:after {
+          right: 2.5em; }
+  .dart380 .top-row {
+    display: flex;
+    height: 7em; }
+    .dart380 .top-row > .item-identification {
+      background-color: #373236;
+      width: 20em;
+      height: 100%;
+      position: relative;
+      padding: 0.5em; }
+      .dart380 .top-row > .item-identification > p.skeranpassad {
+        position: absolute;
+        background-color: yellow;
+        color: black;
+        border-radius: 0.25em;
+        font-size: 1em;
+        padding: 0.5em;
+        transform: rotate(-5deg);
+        top: 1.5em;
+        left: 0.8em; }
+      .dart380 .top-row > .item-identification > p.device-name {
+        font-size: 1.3em;
+        margin-top: 0; }
+      .dart380 .top-row > .item-identification > p.ericsson {
+        position: absolute;
+        bottom: -0.5em;
+        right: 2em;
+        font-size: 0.9em; }
+      .dart380 .top-row > .item-identification .ericsson-logo {
+        position: relative; }
+      .dart380 .top-row > .item-identification .ericsson-logo-1st-bar,
+      .dart380 .top-row > .item-identification .ericsson-logo-2nd-bar,
+      .dart380 .top-row > .item-identification .ericsson-logo-3rd-bar {
+        position: absolute;
+        bottom: 1em;
+        right: 0.5em;
+        height: 0.1em;
+        width: 0.8em;
+        border: 0.15em solid white;
+        border-radius: 0.25em;
+        background-color: white;
+        content: " ";
+        transform: rotate(-10deg); }
+      .dart380 .top-row > .item-identification .ericsson-logo-1st-bar {
+        bottom: 1.5em; }
+      .dart380 .top-row > .item-identification .ericsson-logo-2nd-bar {
+        bottom: 1em; }
+      .dart380 .top-row > .item-identification .ericsson-logo-3rd-bar {
+        bottom: 0.50em; }
+    .dart380 .top-row > .display-container {
+      display: flex;
+      background-color: #1d1e18;
+      height: 100%;
+      width: 100%;
+      margin-left: 1em; }
+      .dart380 .top-row > .display-container > .display {
+        margin: 1em; }
+        .dart380 .top-row > .display-container > .display.display-large {
+          flex-grow: 2; }
+        .dart380 .top-row > .display-container > .display.display-small {
+          flex-grow: 1; }
+        .dart380 .top-row > .display-container > .display > .text {
+          color: #7dff00;
+          font-size: 2em;
+          font-family: "Courier New", monospace;
+          margin: 0;
+          padding-top: 0.3em;
+          padding-left: 1em;
+          background-color: rgba(78, 78, 39, 0.2);
+          min-height: 1.5em; }
+          .dart380 .top-row > .display-container > .display > .text > .blinking {
+            opacity: 1; }
+          .dart380 .top-row > .display-container > .display > .text > .cursor {
+            text-decoration: underline; }
+          .dart380 .top-row > .display-container > .display > .text.blink > .blinking {
+            opacity: 0; }
+          .dart380 .top-row > .display-container > .display > .text.blink > .cursor {
+            text-decoration: none; }
+        .dart380 .top-row > .display-container > .display > .name {
+          width: 100%;
+          border-top: 0.15em solid white;
+          color: white;
+          text-align: center;
+          margin: 0;
+          margin-top: 0.3em;
+          padding: 0.3em; }
+  .dart380 .keyboard {
+    background-color: #373236;
+    margin-top: 1em; }
+    .dart380 .keyboard a.reset {
+      text-decoration: none; }
+      .dart380 .keyboard a.reset:hover {
+        text-decoration: underline; }
+    .dart380 .keyboard button {
+      background-color: #373236;
+      border: 0.15em black solid;
+      border-radius: 0.5em;
+      color: white;
+      font-size: 1.2em;
+      font-weight: bold;
+      width: 3em;
+      height: 3em;
+      margin: 0.3em;
+      z-index: 1000;
+      cursor: pointer;
+      outline: none; }
+      .dart380 .keyboard button:hover, .dart380 .keyboard button.active {
+        color: #e6e6e6;
+        background-color: #1c1a1c; }
+      .dart380 .keyboard button .dart380-btn-sun, .dart380 .keyboard button .dart380-btn-star {
+        position: relative; }
+        .dart380 .keyboard button .dart380-btn-sun:before, .dart380 .keyboard button .dart380-btn-star:before {
+          position: absolute; }
+        .dart380 .keyboard button .dart380-btn-sun.dart380-btn-star:before, .dart380 .keyboard button .dart380-btn-star.dart380-btn-star:before {
+          content: "*";
+          font-size: 3em;
+          top: -0.25em;
+          left: -0.15em; }
+        .dart380 .keyboard button .dart380-btn-sun.dart380-btn-sun:before, .dart380 .keyboard button .dart380-btn-star.dart380-btn-sun:before {
+          content: "\00a4";
+          font-size: 3.5em;
+          top: -0.4em;
+          left: -0.22em; }
+      .dart380 .keyboard button.btn-4 {
+        width: 14.5em; }
+    .dart380 .keyboard .top-section {
+      display: flex; }
+      .dart380 .keyboard .top-section .function-keys {
+        width: 45%; }
+        .dart380 .keyboard .top-section .function-keys .show-message {
+          position: relative;
+          margin-top: 0;
+          border: 0.15em white solid;
+          border-radius: 0.5em;
+          text-align: center; }
+          .dart380 .keyboard .top-section .function-keys .show-message > p {
+            margin: 0.3em; }
+        .dart380 .keyboard .top-section .function-keys .write-plane {
+          height: 4.5em;
+          width: 80%; }
+      .dart380 .keyboard .top-section .radio-keys {
+        width: 55%;
+        display: flex;
+        position: relative; }
+        .dart380 .keyboard .top-section .radio-keys:before {
+          position: absolute;
+          content: " ";
+          width: 100%;
+          height: 100%;
+          left: -1.5em;
+          border-bottom-left-radius: 0.5em;
+          border-left: 0.15em solid white;
+          border-bottom: 0.15em solid white;
+          z-index: 999; }
+      .dart380 .keyboard .top-section .operation-keys {
+        width: 50%;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        z-index: 1000; }
+        .dart380 .keyboard .top-section .operation-keys .write-plane {
+          height: 9em;
+          width: 13.5em; }
+      .dart380 .keyboard .top-section .numeric-keys {
+        width: 50%;
+        text-align: center;
+        z-index: 1000; }
+        .dart380 .keyboard .top-section .numeric-keys .reset {
+          color: white;
+          position: relative; }
+          .dart380 .keyboard .top-section .numeric-keys .reset:before, .dart380 .keyboard .top-section .numeric-keys .reset:after {
+            position: absolute;
+            content: " ";
+            top: 0;
+            height: 0.5em;
+            width: 1.5em;
+            border: 0.15em solid white; }
+          .dart380 .keyboard .top-section .numeric-keys .reset:before {
+            left: -2.7em;
+            border-right: none;
+            border-top: none; }
+          .dart380 .keyboard .top-section .numeric-keys .reset:after {
+            right: -2.7em;
+            border-left: none;
+            border-top: none; }
+      .dart380 .keyboard .top-section .write-plane {
+        background-color: silver;
+        margin: 0.15em; }
+    .dart380 .keyboard ul {
+      list-style: none;
+      margin: 0;
+      margin-top: 0.3em;
+      padding: 0; }
+      .dart380 .keyboard ul.keys > li {
+        vertical-align: top; }
+      .dart380 .keyboard ul ul {
+        display: inline-block; }
+      .dart380 .keyboard ul > li {
+        display: inline-block;
+        margin: 0; }
+    .dart380 .keyboard .qwerty {
+      margin-top: 2em; }
+      .dart380 .keyboard .qwerty ul.indent-half-key {
+        margin-left: 2.5em; }
+      .dart380 .keyboard .qwerty ul.indent-one-key {
+        margin-left: 4.6em; }
+  .dart380 .printer {
+    position: absolute;
+    bottom: 0em;
+    right: 1em;
+    background-color: #fffcce;
+    color: black; }
+    .dart380 .printer .message {
+      padding: 0.5em; }
+      .dart380 .printer .message pre {
+        margin: 0; }
+
+/*# sourceMappingURL=app.css.map */
