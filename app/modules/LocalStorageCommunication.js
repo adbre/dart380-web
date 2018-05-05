@@ -1,6 +1,12 @@
 'use strict';
 
+// The purpose of this local storage communication
+// is to enable multiple windows of the same browser
+// to communicate with each other, without requiring
+// a working SignalR connection.
+
 var _ = require('lodash');
+var Promise = require('native-promise-only');
 
 var MESSAGE_KEY = 'localStorageCommunication.message';
 
@@ -10,7 +16,7 @@ function LocalStorageCommunication(communication, eventBus) {
     this._senderId = Date.now();
 
     window.addEventListener('storage', function (e) {
-        if (e.key !== MESSAGE_KEY) {
+        if (e.key !== MESSAGE_KEY || !e.newValue) {
             return;
         }
 

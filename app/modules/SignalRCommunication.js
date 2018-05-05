@@ -16,6 +16,9 @@ function SignalRCommunication(communication, eventBus) {
         communication.receive(JSON.parse(message));
     }.bind(this);
 
+    // IE11 sucks
+    $.ajaxSetup({ cache: false });
+
     $.connection.hub.start().done(function () {
         this._isHubReady = true;
         this.beginReceive(this._currentContext);
