@@ -31,6 +31,7 @@
     "jquery": "^3.0.0",
     "knockout": "^3.4.0",
     "lodash": "^4.13.1",
+    "native-promise-only": "^0.8.1",
     "signalr": "^2.2.1"
   }
 }

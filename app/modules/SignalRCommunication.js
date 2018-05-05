@@ -1,5 +1,7 @@
 'use strict';
 
+var Promise = require('native-promise-only');
+
 function SignalRCommunication(communication, eventBus) {
     this._communication = communication;
 
