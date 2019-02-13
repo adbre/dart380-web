@@ -30,7 +30,7 @@
     "inherits": "^2.0.3",
     "jquery": "^3.0.0",
     "knockout": "^3.4.0",
-    "lodash": "^4.13.1",
+    "lodash": "^4.17.11",
     "native-promise-only": "^0.8.1",
     "signalr": "^2.2.1"
   }
